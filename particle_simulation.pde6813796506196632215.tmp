@@ -29,12 +29,12 @@ void setup() {
 }
 
 void draw() {
-  //writes title with fps count and restart instructions
-  surface.setTitle("Particle simulation running at " + int(frameRate) + " fps. Press \"r\" to restart.");
+  //writes title with fps count
+  surface.setTitle("particle_sim " + int(frameRate) + " fps. Press \"r\" to restart!");
   //displays background
   background(0);
   
-  //reinitializes n particles in particle system with "r" keypress
+  //reinitializes particles in particle system with r keypress
   if (keyPressed) {
     if (key == 'r') {
       //removes all particles
@@ -44,11 +44,12 @@ void draw() {
     }
   }
   
-  //adds n particles with "a" keypress
+  //applies forces
+  ps.applyForce(gravity);
+  
   if (keyPressed) {
-    if (key == 'a') {
-      //adds n particles to particle system
-      ps.addParticles(n);
+    if (key == 'w') {
+      ps.applyForce(upWind);
     }
   }
   
@@ -72,14 +73,4 @@ void draw() {
   
   //runs particle system
   ps.psrun();
-  
-  //applies gravity
-  ps.applyForce(gravity);
-  
-  //applies upward wind force with "w" keypress
-  if (keyPressed) {
-    if (key == 'w') {
-      ps.applyForce(upWind);
-    }
-  }
 }

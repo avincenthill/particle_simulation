@@ -10,6 +10,7 @@ class Particle {
   float momentum;
   float charge;
   float elasticity = 0.9;
+  float drag = 0.999;
   float radius;
   float[] RGBcolor = {255,255,255};
   float agingRate = 0;
@@ -20,7 +21,7 @@ class Particle {
     velocity = new PVector(random(-10,10), random(-10,10), random (-10,10));
     acceleration = new PVector(0,0,0);
     lifespan = 100;
-    mass = random(1,20);
+    mass = random(1,15);
     momentum = velocity.mag()*mass;
     density = mass/radius;
     radius = mass;
@@ -32,15 +33,16 @@ class Particle {
 
   //executes methods on particles
   void run() {
+    age();
     bounceOffEdges();
     update();
-    age();
     display();
   }
 
-  //updates particles positions and velocities, zeroes acceleration
+  //updates particles positions and velocities, zeroes acceleration, adds drag to velocity
   void update() {
     velocity.add(acceleration);
+    velocity.mult(drag);
     position.add(velocity);
     acceleration.mult(0);
   }

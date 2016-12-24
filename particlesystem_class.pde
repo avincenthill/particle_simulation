@@ -14,9 +14,16 @@ class ParticleSystem {
   }
 
   //adds n particles to ArrayList particleList
-  void addParticle(int n) {
+  void addParticles(int n) {
       for (int i = 0; i < n; i++) {
         particleList.add(new Particle());
+    }
+  }
+  
+  //removes all particles from ArrayList particleList
+  void removeAllParticles() {
+      for (int i = particleList.size()-1; i >= 0; i--) {
+        particleList.remove(i);
     }
   }
   
