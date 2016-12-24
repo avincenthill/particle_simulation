@@ -8,16 +8,22 @@ import peasy.*;
 ParticleSystem ps;
 
 //n is the number of particles in the simulation
-int n = 1000;
+int n = 20;
 
 //size of sim boundaries
 float simSize = 1000;
+float volumeFudgeFactor = 0.9;
+float simVolume = pow(simSize*volumeFudgeFactor,3);
+float simEdgeMag = volumeFudgeFactor*simSize/2;
 
 //adds PeasyCam object
 PeasyCam cam;
 
 void setup() {
   size(1000, 1000, P3D);
+  
+  //color mode
+  colorMode(HSB,100);
   
   //initializes cam
   cam = new PeasyCam(this, 2500);
@@ -54,7 +60,7 @@ void draw() {
   
   //displays box at simulation boundary
   pushMatrix();
-  stroke(255,255,255);
+  stroke(0,0,100);
   strokeWeight(5);
   line(simSize/2, simSize/2, simSize/2, -simSize/2, simSize/2, simSize/2);
   line(-simSize/2, simSize/2, simSize/2, -simSize/2, -simSize/2, simSize/2);

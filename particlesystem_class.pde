@@ -32,6 +32,18 @@ class ParticleSystem {
     //applies run method to every Particle in particleList
     for (int i = particleList.size()-1; i >= 0; i--) {
       Particle p = particleList.get(i);
+      
+      //interacts particle p with otherParticle
+      for (int j = particleList.size()-1; j >= 0; j--) {
+        Particle otherParticle = particleList.get(j);
+        float distBetweenParticles = p.position.dist(otherParticle.position);
+        if (distBetweenParticles < p.radius + otherParticle.radius && distBetweenParticles != 0){
+          p.collide(otherParticle);
+          p.bounce(otherParticle);
+        }
+      }
+      
+      //runs particles
       p.run();
            
       //removes dead particles
