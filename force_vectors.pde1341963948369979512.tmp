@@ -1,0 +1,7 @@
+// Based on code by Daniel Shiffman
+// Alex Vincent-Hill
+
+//gravity
+float gravityMagX = 0;
+float gravityMagY = .5;
+PVector gravity = new PVector(gravityMagX, gravityMagY);

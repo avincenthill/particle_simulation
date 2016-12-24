@@ -1,0 +1,36 @@
+// Based on code by Daniel Shiffman
+// Alex Vincent-Hill
+
+//imports libraries
+import peasy.*;
+
+//declares particle system
+ParticleSystem ps;
+
+//adds PeasyCam object
+PeasyCam cam;
+
+void setup() {
+  size(1000, 1000, P3D);
+  
+  //initializes cam
+  cam = new PeasyCam(this, 500);
+  
+  background(0);
+
+  //initializes particle system
+  ps = new ParticleSystem();
+}
+
+void draw() {
+  //writes title with fps count
+  frame.setTitle("particle_sim " + int(frameRate) + " fps");
+  //displays background
+  background(0);
+  //applies forces
+  ps.applyForce(gravity);
+  //adds particles to particle system
+  ps.addParticle();
+  //runs particle system
+  ps.psrun();
+}

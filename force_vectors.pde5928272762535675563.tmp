@@ -1,0 +1,2 @@
+//gravity
+PVector gravity = new PVector(0,.5,0);
