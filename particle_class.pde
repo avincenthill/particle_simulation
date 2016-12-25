@@ -2,6 +2,7 @@
 // Alex Vincent-Hill
 
 class Particle {
+  int id;
   PVector position;
   PVector velocity;
   PVector acceleration;
@@ -9,15 +10,13 @@ class Particle {
   float density = 1;
   PVector momentum;
   float kineticEnergy;
-  float charge;
-  float elasticity = 0.9;
+  float charge = 1;
+  float elasticity = 0.7;
   float mu = 0.99;
   float drag = 0.999;
   float radius;
-  float[] RGBcolor = {255,255,255};
   float agingRate = 0;
   float lifespan;
-  int id;
   int collidedWith;
   int lastCollideFrame;
   int physicsCooldown = 2;
@@ -29,7 +28,7 @@ class Particle {
     velocity = new PVector(random(-10,10), random(-10,10), random (-10,10));
     acceleration = new PVector(0,0,0);
     lifespan = 100;
-    mass = random(100000,300000);
+    mass = random(1000,150000);
     id = setID;
   }
 
@@ -127,7 +126,7 @@ class Particle {
     lifespan -= agingRate;
   }
 
-  //displays points with particles properties
+  //displays particle
   void display() {
     
     //lowers sphere detail

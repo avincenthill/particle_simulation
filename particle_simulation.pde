@@ -8,20 +8,22 @@ import peasy.*;
 ParticleSystem ps;
 
 //n is the number of particles in the simulation
-int n = 100;
+int n = 10;
 
-//size of sim boundaries
+//sim dimensions
 float simSize = 1000;
-float volumeFudgeFactor = 0.9;
+float volumeFudgeFactor = 0.95;
 float simVolume = pow(simSize*volumeFudgeFactor,3);
 float simEdgeMag = volumeFudgeFactor*simSize/2;
 
-//text formatting
-int textSize = 50;
-
-//sim environment bools
+//sim global variables
 boolean gravityToggle = true;
 boolean inelasticCollisionsToggle = false;
+float averageKineticEnergy;
+
+//text formatting
+int textSize = 50;
+String gravityToggleText;
 
 //adds PeasyCam object
 PeasyCam cam;
@@ -32,8 +34,11 @@ void setup() {
   //color mode
   colorMode(HSB,360,100,100);
   
-  //initializes cam
+  //initializes cam and orients view
   cam = new PeasyCam(this, 2500);
+  cam.rotateX(PI/6);
+  cam.rotateY(-PI/6);
+  cam.rotateZ(PI/12);
   
   background(0);
   
@@ -43,7 +48,7 @@ void setup() {
 
 void draw() {
   //writes title with fps count and restart instructions
-  surface.setTitle("Particle simulation running at " + int(frameRate) + " FPS. Press \"r\" to restart.");
+  surface.setTitle("Particle simulation running at " + int(frameRate) + " FPS.");
   //displays background
   background(0);
   
@@ -61,19 +66,19 @@ void draw() {
   if (keyPressed) {
     if (key == 'a') {
       //adds n particles to particle system
-      ps.addParticles(n);
+      ps.addParticles(n/10);
     }
   }
   
   //displays text above simulation area
   textSize(textSize);
   fill(0,0,100);
-  text("Particle simulation running at " + round(frameRate) + " FPS", -500, -500-(textSize)*6, -500);
-  text("Press \"r\" to restart.", -500, -500-(textSize)*5, -500);
-  text("Press \"a\" to add " + n + " particles.", -500, -500-(textSize)*4, -500);
-  text("Press \"SPACE\" to toggle gravity.", -500, -500-(textSize)*3, -500);
+  text("Particle simulation running at " + round(frameRate) + " FPS.", -500, -500-(textSize)*6, -500);
+  text("Press \"r\" to restart with " + n + " particles.", -500, -500-(textSize)*5, -500);
+  text("Hold \"a\" to add particles.", -500, -500-(textSize)*4, -500);
+  text("Press \"SPACE\" to turn " + gravityToggleText + " gravity.", -500, -500-(textSize)*3, -500);
   text("Press \"i\" to toggle inelastic collisions.", -500, -500-(textSize)*2, -500);
-  text("Hold \"w\" to add upward windforce.", -500, -500-(textSize)*1, -500);
+  text("Hold \"w\" and \"s\"  to add wind forces.", -500, -500-(textSize)*1, -500);
   
   //displays box at simulation boundary
   pushMatrix();
@@ -96,28 +101,36 @@ void draw() {
   //runs particle system
   ps.psrun();
   
+//user I/O
   //applies gravity
-  
   if (gravityToggle) {
       ps.applyForce(gravity);
+      gravityToggleText = "off";
+  }
+  else{
+    gravityToggleText = "on";
   }
   
-  //applies upward wind force with "w" keypress
+  //applies wind force with "w" keypress
   if (keyPressed) {
     if (key == 'w') {
-      ps.applyForce(upWind);
+      ps.applyForce(upwind);
+    }
+  }
+  if (keyPressed) {
+    if (key == 's') {
+      ps.applyForce(downwind);
     }
   }
 }
 
-//user I/O
-
-//removes gravity force with "g" keypress
 void keyReleased() {
   if (key == ' ') {
+    //toggles gravity force with "g" keypress
     gravityToggle = !gravityToggle;
   }
-   if (key == 'i') {
+  if (key == 'i') {
+    //toggles inelastic collisions with "i" keypress
     inelasticCollisionsToggle = !inelasticCollisionsToggle;
   }
 }
