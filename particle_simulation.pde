@@ -8,13 +8,16 @@ import peasy.*;
 ParticleSystem ps;
 
 //n is the number of particles in the simulation
-int n = 20;
+int n = 100;
 
 //size of sim boundaries
 float simSize = 1000;
 float volumeFudgeFactor = 0.9;
 float simVolume = pow(simSize*volumeFudgeFactor,3);
 float simEdgeMag = volumeFudgeFactor*simSize/2;
+
+//text formatting
+int textSize = 50;
 
 //sim environment bools
 boolean gravityToggle = true;
@@ -40,7 +43,7 @@ void setup() {
 
 void draw() {
   //writes title with fps count and restart instructions
-  surface.setTitle("Particle simulation running at " + int(frameRate) + " fps. Press \"r\" to restart.");
+  surface.setTitle("Particle simulation running at " + int(frameRate) + " FPS. Press \"r\" to restart.");
   //displays background
   background(0);
   
@@ -61,6 +64,16 @@ void draw() {
       ps.addParticles(n);
     }
   }
+  
+  //displays text above simulation area
+  textSize(textSize);
+  fill(0,0,100);
+  text("Particle simulation running at " + round(frameRate) + " FPS", -500, -500-(textSize)*6, -500);
+  text("Press \"r\" to restart.", -500, -500-(textSize)*5, -500);
+  text("Press \"a\" to add " + n + " particles.", -500, -500-(textSize)*4, -500);
+  text("Press \"SPACE\" to toggle gravity.", -500, -500-(textSize)*3, -500);
+  text("Press \"i\" to toggle inelastic collisions.", -500, -500-(textSize)*2, -500);
+  text("Hold \"w\" to add upward windforce.", -500, -500-(textSize)*1, -500);
   
   //displays box at simulation boundary
   pushMatrix();
