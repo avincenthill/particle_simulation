@@ -6,7 +6,7 @@ class Particle {
   PVector velocity;
   PVector acceleration;
   float mass;
-  float density;
+  float density = 1;
   PVector momentum;
   float kineticEnergy;
   float charge;
@@ -17,19 +17,26 @@ class Particle {
   float[] RGBcolor = {255,255,255};
   float agingRate = 0;
   float lifespan;
+  int id;
+  int collidedWith;
+  int lastCollideFrame;
+  int physicsCooldown = 2;
+  float bindingEnergy;
 
-  Particle() {
+  //Particle constructor
+  Particle(int setID) {
     position = new PVector(random(-450,450),random(-450,450),random(-450,450));
     velocity = new PVector(random(-10,10), random(-10,10), random (-10,10));
     acceleration = new PVector(0,0,0);
     lifespan = 100;
-    mass = random(20,50);
+    mass = random(100000,300000);
+    id = setID;
   }
 
   void applyForce(PVector force) {
     acceleration.add(force);
   }
-
+  
   //executes methods on particles
   void run() {
     age();
@@ -49,13 +56,10 @@ class Particle {
     momentum = velocity.copy().mult(mass);
     
     //updates KE
-    kineticEnergy = 0.5*mass*pow(velocity.mag(),2);
+    kineticEnergy = abs(0.5*mass*pow(velocity.mag(),2));
     
     //updates density and radius
-    density = mass/radius;
-    radius = mass;
-    
-    println(kineticEnergy);
+    radius = (float)Math.cbrt((double)((3*mass*density)/(4*PI)));
   }
 
   //bounces particles off the edges of the area, constrains position to sim volume, adds mu to sliding on boundary
@@ -80,19 +84,42 @@ class Particle {
     }
   }
   
+  //collision event specified in particle system
   void collide(Particle otherParticle){
+    inelasticCollision(otherParticle);
+  }
+  
+  //inelastic collision physics
+  void inelasticCollision(Particle otherParticle){
+    if (inelasticCollisionsToggle && otherParticle.momentum != null && this.momentum != null && this.radius <= 100 && otherParticle.radius <= 100) {
+      otherParticle.lifespan = 0;
+      this.mass = this.mass + otherParticle.mass;
+      this.momentum.add(otherParticle.momentum);
+      this.velocity = this.momentum.div(this.mass);
+      collidedWith = otherParticle.id;
+      otherParticle.collidedWith = id;
+    }
   }
   
   //bounces particles
   void bounce(Particle otherParticle){
-    //swaps particles velocities
-    PVector tempVelocity = velocity;
-    velocity = otherParticle.velocity.mult(elasticity);
-    otherParticle.velocity = tempVelocity.mult(elasticity);
-    
-    PVector interparticleDistance = PVector.sub(otherParticle.position,position);
-    interparticleDistance.setMag((radius + otherParticle.radius)/2);
-    otherParticle.position.add(interparticleDistance);
+    if ((this.radius > 100 && otherParticle.radius > 100) || !inelasticCollisionsToggle) {
+      //swaps particles velocities
+      PVector tempVelocity = velocity;
+      velocity = otherParticle.velocity.mult(elasticity);
+      otherParticle.velocity = tempVelocity.mult(elasticity);
+      
+      PVector interparticleDistance = PVector.sub(otherParticle.position,position);
+      interparticleDistance.setMag((radius + otherParticle.radius)/2 - 0.5);
+      otherParticle.position.add(interparticleDistance);
+      
+      collidedWith = otherParticle.id;
+      otherParticle.collidedWith = id;
+      
+      
+      lastCollideFrame = frameCount;
+      otherParticle.lastCollideFrame = frameCount;
+    }
   }
 
   //ages particle
@@ -102,13 +129,14 @@ class Particle {
 
   //displays points with particles properties
   void display() {
+    
     //lowers sphere detail
     sphereDetail(20);
     
     pushMatrix();
        
     //draws particle as a sphere
-    fill(map(kineticEnergy, 0, 20000, 180, 360), map(kineticEnergy, 0, 20000, 100, 0), 100);
+    fill(map(log(kineticEnergy), 5, 25, 225, 360), 100 - map(log(kineticEnergy), 5, 25, 0, 100), 100);
     noStroke();
     translate(position.x, position.y, position.z);
     sphere(radius);

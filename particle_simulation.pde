@@ -16,6 +16,10 @@ float volumeFudgeFactor = 0.9;
 float simVolume = pow(simSize*volumeFudgeFactor,3);
 float simEdgeMag = volumeFudgeFactor*simSize/2;
 
+//sim environment bools
+boolean gravityToggle = true;
+boolean inelasticCollisionsToggle = false;
+
 //adds PeasyCam object
 PeasyCam cam;
 
@@ -23,7 +27,7 @@ void setup() {
   size(1000, 1000, P3D);
   
   //color mode
-  colorMode(HSB,100);
+  colorMode(HSB,360,100,100);
   
   //initializes cam
   cam = new PeasyCam(this, 2500);
@@ -80,12 +84,27 @@ void draw() {
   ps.psrun();
   
   //applies gravity
-  ps.applyForce(gravity);
+  
+  if (gravityToggle) {
+      ps.applyForce(gravity);
+  }
   
   //applies upward wind force with "w" keypress
   if (keyPressed) {
     if (key == 'w') {
       ps.applyForce(upWind);
     }
+  }
+}
+
+//user I/O
+
+//removes gravity force with "g" keypress
+void keyReleased() {
+  if (key == ' ') {
+    gravityToggle = !gravityToggle;
+  }
+   if (key == 'i') {
+    inelasticCollisionsToggle = !inelasticCollisionsToggle;
   }
 }

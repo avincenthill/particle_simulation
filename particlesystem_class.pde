@@ -16,7 +16,7 @@ class ParticleSystem {
   //adds n particles to ArrayList particleList
   void addParticles(int n) {
       for (int i = 0; i < n; i++) {
-        particleList.add(new Particle());
+        particleList.add(new Particle(i));
     }
   }
   
@@ -37,7 +37,10 @@ class ParticleSystem {
       for (int j = particleList.size()-1; j >= 0; j--) {
         Particle otherParticle = particleList.get(j);
         float distBetweenParticles = p.position.dist(otherParticle.position);
-        if (distBetweenParticles < p.radius + otherParticle.radius && distBetweenParticles != 0){
+        if (distBetweenParticles <= p.radius + otherParticle.radius &&
+            p.id != otherParticle.id &&
+            p.collidedWith != otherParticle.id &&
+            p.lastCollideFrame + p.physicsCooldown <= frameCount){
           p.collide(otherParticle);
           p.bounce(otherParticle);
         }
