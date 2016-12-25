@@ -3,25 +3,34 @@
 
 class Particle {
   int id;
+  
   PVector position;
   PVector velocity;
   PVector acceleration;
+  
   float mass;
+  float radius;
   float density = 1;
   PVector momentum;
   float kineticEnergy;
+  
   float charge = 1;
+  float bindingEnergy;
+  
   float elasticity = 0.7;
   float mu = 0.99;
-  float drag = 0.999;
-  float radius;
+  float drag = 0.99;
+  
   float agingRate = 0;
   float lifespan;
   int collidedWith;
   int lastCollideFrame;
   int physicsCooldown = 2;
-  float bindingEnergy;
-
+  
+  float hValue;
+  float sValue;
+  float bValue = 100;
+  
   //Particle constructor
   Particle(int setID) {
     position = new PVector(random(-450,450),random(-450,450),random(-450,450));
@@ -55,7 +64,7 @@ class Particle {
     momentum = velocity.copy().mult(mass);
     
     //updates KE
-    kineticEnergy = abs(0.5*mass*pow(velocity.mag(),2));
+    kineticEnergy = abs(0.5*mass*velocity.magSq());
     
     //updates density and radius
     radius = (float)Math.cbrt((double)((3*mass*density)/(4*PI)));
@@ -85,40 +94,29 @@ class Particle {
   
   //collision event specified in particle system
   void collide(Particle otherParticle){
-    inelasticCollision(otherParticle);
-  }
-  
-  //inelastic collision physics
-  void inelasticCollision(Particle otherParticle){
-    if (inelasticCollisionsToggle && otherParticle.momentum != null && this.momentum != null && this.radius <= 100 && otherParticle.radius <= 100) {
-      otherParticle.lifespan = 0;
-      this.mass = this.mass + otherParticle.mass;
-      this.momentum.add(otherParticle.momentum);
-      this.velocity = this.momentum.div(this.mass);
-      collidedWith = otherParticle.id;
-      otherParticle.collidedWith = id;
-    }
+    //registers which particle bounced with which
+    collidedWith = otherParticle.id;
+    otherParticle.collidedWith = id;
+    //registers collision in time
+    lastCollideFrame = frameCount;
+    otherParticle.lastCollideFrame = frameCount;
+    
+    //collision diognostics
+    //TBD: fix why particles not colliding anymore
+    //println("Bang!  @ " + frameCount);
   }
   
   //bounces particles
   void bounce(Particle otherParticle){
-    if ((this.radius > 100 && otherParticle.radius > 100) || !inelasticCollisionsToggle) {
-      //swaps particles velocities
-      PVector tempVelocity = velocity;
-      velocity = otherParticle.velocity.mult(elasticity);
-      otherParticle.velocity = tempVelocity.mult(elasticity);
-      
-      PVector interparticleDistance = PVector.sub(otherParticle.position,position);
-      interparticleDistance.setMag((radius + otherParticle.radius)/2 - 0.5);
-      otherParticle.position.add(interparticleDistance);
-      
-      collidedWith = otherParticle.id;
-      otherParticle.collidedWith = id;
-      
-      
-      lastCollideFrame = frameCount;
-      otherParticle.lastCollideFrame = frameCount;
-    }
+    //swaps particles velocities
+    PVector tempVelocity = velocity;
+    velocity = otherParticle.velocity.mult(elasticity);
+    otherParticle.velocity = tempVelocity.mult(elasticity);
+    
+    PVector interparticleDistance = PVector.sub(otherParticle.position,position);
+    interparticleDistance.setMag((radius + otherParticle.radius)/2 - 0.5);
+    otherParticle.position.add(interparticleDistance);
+    
   }
 
   //ages particle
@@ -134,8 +132,12 @@ class Particle {
     
     pushMatrix();
        
+    //fills with hue and saturation preportional to KE
+    hValue = constrain(map(log(kineticEnergy), log(pow(10,5)), log(pow(10,9)), 270, 360), 225, 360);
+    sValue = constrain(100 - map(log(kineticEnergy), log(pow(10,7)), log(pow(10,9)), 0, 100), 0, 100);
+    fill(hValue, sValue, bValue);
+    
     //draws particle as a sphere
-    fill(map(log(kineticEnergy), 5, 25, 225, 360), 100 - map(log(kineticEnergy), 5, 25, 0, 100), 100);
     noStroke();
     translate(position.x, position.y, position.z);
     sphere(radius);

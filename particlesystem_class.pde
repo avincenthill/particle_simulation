@@ -2,7 +2,9 @@
 // Alex Vincent-Hill
 
 class ParticleSystem {
+  //system variables
   PVector origin;
+  float temperature;
   
   //creates ArrayList of Particles
   ArrayList<Particle> particleList;
@@ -29,22 +31,31 @@ class ParticleSystem {
   
   //updates particle system
   void psrun() {
+    
     //applies run method to every Particle in particleList
     for (int i = particleList.size()-1; i >= 0; i--) {
       Particle p = particleList.get(i);
       
+      //adds all kinetic energies
+      temperature += p.kineticEnergy;
+
       //interacts particle p with otherParticle
       for (int j = particleList.size()-1; j >= 0; j--) {
+        
         Particle otherParticle = particleList.get(j);
         float distBetweenParticles = p.position.dist(otherParticle.position);
         if (distBetweenParticles <= p.radius + otherParticle.radius &&
             p.id != otherParticle.id &&
             p.collidedWith != otherParticle.id &&
             p.lastCollideFrame + p.physicsCooldown <= frameCount){
+              
           p.collide(otherParticle);
           p.bounce(otherParticle);
         }
       }
+      
+      //averages summed KEs to get system temperature
+      temperature = round(temperature/particleList.size());
       
       //runs particles
       p.run();
