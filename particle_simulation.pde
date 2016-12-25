@@ -63,7 +63,7 @@ void draw() {
   
   //adds n particles with "a" keypress
   if (keyPressed) {
-    if (key == 'a') {
+    if (key == 'q') {
       //adds n particles to particle system
       ps.addParticles(n/10);
     }
@@ -83,18 +83,20 @@ void draw() {
   
   text("Press \"SPACE\" to turn " + gravityToggleText + " gravity.", -500, -500-(textSize)*4, -500);
   text("Press \"r\" to restart with " + n + " particles.", -500, -500-(textSize)*3, -500);
-  text("Hold \"a\" to add particles.", -500, -500-(textSize)*2, -500);
-  text("Hold \"w\" and \"s\"  to add wind forces.", -500, -500-(textSize)*1, -500);
+  text("Hold \"q\" to add particles.", -500, -500-(textSize)*2, -500);
+  text("Hold \"w,a,s,d\" to add wind forces.", -500, -500-(textSize)*1, -500);
   
   
   //displays box at simulation boundary
   pushMatrix();
 
-  float boxHValue = constrain(map(log(ps.temperature), log(pow(10,1)), log(pow(10,7)), 270, 360), 225, 360);
-  float boxSValue = constrain(100 - map(log(ps.temperature), log(pow(10,5)), log(pow(10,7)), 0, 100), 0, 100);
+  float boxHValue = constrain(map(constrain(log(ps.temperature),0,999999999), log(pow(10,1)), log(pow(10,6)), 270, 360), 225, 360);
+  float boxSValue = constrain(100 - map(constrain(log(ps.temperature),0,999999999), log(pow(10,4)), log(pow(10,6)), 0, 100), 0, 100);
   float boxBValue = 100;
+  
   stroke(boxHValue,boxSValue,boxBValue);
   strokeWeight(5);
+  
   line(simSize/2, simSize/2, simSize/2, -simSize/2, simSize/2, simSize/2);
   line(-simSize/2, simSize/2, simSize/2, -simSize/2, -simSize/2, simSize/2);
   line(-simSize/2, -simSize/2, simSize/2, simSize/2, -simSize/2, simSize/2);
@@ -125,15 +127,25 @@ void draw() {
     gravityToggleText = "on";
   }
   
-  //applies wind force with "w" keypress
+  //applies wind force with "w,a,s,d" keypress
   if (keyPressed) {
     if (key == 'w') {
-      ps.applyForce(upwind);
+      ps.applyForce(wwind);
+    }
+  }
+  if (keyPressed) {
+    if (key == 'a') {
+      ps.applyForce(awind);
     }
   }
   if (keyPressed) {
     if (key == 's') {
-      ps.applyForce(downwind);
+      ps.applyForce(swind);
+    }
+  }
+  if (keyPressed) {
+    if (key == 'd') {
+      ps.applyForce(dwind);
     }
   }
 }

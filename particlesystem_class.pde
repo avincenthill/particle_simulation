@@ -4,7 +4,7 @@
 class ParticleSystem {
   //system variables
   PVector origin;
-  float temperature;
+  float temperature = 0;
   
   //creates ArrayList of Particles
   ArrayList<Particle> particleList;
@@ -36,21 +36,18 @@ class ParticleSystem {
     for (int i = particleList.size()-1; i >= 0; i--) {
       Particle p = particleList.get(i);
       
-      //adds all kinetic energies
+      //sums all kinetic energies of particles in particleList
       temperature += p.kineticEnergy;
 
       //interacts particle p with otherParticle
       for (int j = particleList.size()-1; j >= 0; j--) {
-        
         Particle otherParticle = particleList.get(j);
+        
         float distBetweenParticles = p.position.dist(otherParticle.position);
         if (distBetweenParticles <= p.radius + otherParticle.radius &&
-            p.id != otherParticle.id &&
-            p.collidedWith != otherParticle.id &&
             p.lastCollideFrame + p.physicsCooldown <= frameCount){
-              
-          p.collide(otherParticle);
-          p.bounce(otherParticle);
+            p.collide(otherParticle);
+            p.bounce(otherParticle);
         }
       }
       

@@ -17,13 +17,12 @@ class Particle {
   float charge = 1;
   float bindingEnergy;
   
-  float elasticity = 0.7;
-  float mu = 0.99;
-  float drag = 0.99;
+  float elasticity = 0.99;
+  float mu = 0.999;
+  float drag = 0.999;
   
   float agingRate = 0;
   float lifespan;
-  int collidedWith;
   int lastCollideFrame;
   int physicsCooldown = 2;
   
@@ -37,7 +36,7 @@ class Particle {
     velocity = new PVector(random(-10,10), random(-10,10), random (-10,10));
     acceleration = new PVector(0,0,0);
     lifespan = 100;
-    mass = random(1000,150000);
+    mass = random(1000,100000);
     id = setID;
   }
 
@@ -58,7 +57,7 @@ class Particle {
     velocity.add(acceleration);
     velocity.mult(drag);
     position.add(velocity);
-    acceleration.mult(0);
+    acceleration.mult(.5);
     
     //updates momentum
     momentum = velocity.copy().mult(mass);
@@ -94,16 +93,6 @@ class Particle {
   
   //collision event specified in particle system
   void collide(Particle otherParticle){
-    //registers which particle bounced with which
-    collidedWith = otherParticle.id;
-    otherParticle.collidedWith = id;
-    //registers collision in time
-    lastCollideFrame = frameCount;
-    otherParticle.lastCollideFrame = frameCount;
-    
-    //collision diognostics
-    //TBD: fix why particles not colliding anymore
-    //println("Bang!  @ " + frameCount);
   }
   
   //bounces particles
@@ -132,9 +121,9 @@ class Particle {
     
     pushMatrix();
        
-    //fills with hue and saturation preportional to KE
-    hValue = constrain(map(log(kineticEnergy), log(pow(10,5)), log(pow(10,9)), 270, 360), 225, 360);
-    sValue = constrain(100 - map(log(kineticEnergy), log(pow(10,7)), log(pow(10,9)), 0, 100), 0, 100);
+    //fills with hue and saturation preportional to kineticEnergy
+    hValue = constrain(map(log(kineticEnergy), log(pow(10,4)), log(pow(10,8)), 270, 360), 225, 360);
+    sValue = constrain(100 - map(log(kineticEnergy), log(pow(10,6)), log(pow(10,8)), 0, 100), 0, 100);
     fill(hValue, sValue, bValue);
     
     //draws particle as a sphere
