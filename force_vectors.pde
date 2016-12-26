@@ -4,6 +4,7 @@
 //gravity
 float gravityMag = .5;
 PVector gravity = new PVector (0,gravityMag,0);
+PVector antigravity = new PVector (0,-gravityMag,0);
 
 //wind
 PVector wwind = new PVector (0,-1,0);

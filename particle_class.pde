@@ -13,6 +13,7 @@ class Particle {
   float density = 1;
   PVector momentum;
   float kineticEnergy;
+  float gravitationalPotentialEnergy;
   
   float charge = 1;
   float bindingEnergy;
@@ -22,7 +23,7 @@ class Particle {
   float drag = 0.999;
   
   float agingRate = 0;
-  float lifespan;
+  float life;
   int lastCollideFrame;
   int physicsCooldown = 2;
   
@@ -35,7 +36,7 @@ class Particle {
     position = new PVector(random(-450,450),random(-450,450),random(-450,450));
     velocity = new PVector(random(-10,10), random(-10,10), random (-10,10));
     acceleration = new PVector(0,0,0);
-    lifespan = 100;
+    life = 100;
     mass = random(1000,100000);
     id = setID;
   }
@@ -62,8 +63,11 @@ class Particle {
     //updates momentum
     momentum = velocity.copy().mult(mass);
     
-    //updates KE
+    //updates KE (1/2mv^2)
     kineticEnergy = abs(0.5*mass*velocity.magSq());
+    
+    //updates GPE (mgh)
+    gravitationalPotentialEnergy = mass * gravitationalConstant * ((halfSimSize)-position.y);
     
     //updates density and radius
     radius = (float)Math.cbrt((double)((3*mass*density)/(4*PI)));
@@ -71,28 +75,29 @@ class Particle {
 
   //bounces particles off the edges of the area, constrains position to sim volume, adds mu to sliding on boundary
   void bounceOffEdges(){
-    if ((position.x + radius >= simEdgeMag) || (position.x - radius <= -simEdgeMag)) {
+    if ((position.x + radius >= adjustedHalfSimSize) || (position.x - radius <= -adjustedHalfSimSize)) {
       velocity.x = elasticity*velocity.x * -1;
       velocity.y = mu*velocity.y;
       velocity.z = mu*velocity.z;
-      position.x = constrain(position.x, -simEdgeMag + radius, simEdgeMag - radius);
+      position.x = constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     }
-    if ((position.y + radius >= simEdgeMag) || (position.y - radius <= -simEdgeMag)) {
+    if ((position.y + radius >= adjustedHalfSimSize) || (position.y - radius <= -adjustedHalfSimSize)) {
       velocity.y = elasticity*velocity.y * -1;
       velocity.x = mu*velocity.x;
       velocity.z = mu*velocity.z;
-      position.y = constrain(position.y, -simEdgeMag + radius, simEdgeMag - radius);
+      position.y = constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     }
-    if ((position.z + radius >= simEdgeMag) || (position.z - radius <= -simEdgeMag)) {
+    if ((position.z + radius >= adjustedHalfSimSize) || (position.z - radius <= -adjustedHalfSimSize)) {
       velocity.z = elasticity*velocity.z * -1;
       velocity.x = mu*velocity.x;
       velocity.y = mu*velocity.y;
-      position.z = constrain(position.z, -simEdgeMag + radius, simEdgeMag - radius);
+      position.z = constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     }
   }
   
   //collision event specified in particle system
   void collide(Particle otherParticle){
+    //println("Bang! @ " + frameCount);
   }
   
   //bounces particles
@@ -108,9 +113,9 @@ class Particle {
     
   }
 
-  //ages particle
+  //ages particle by agingRate
   void age(){
-    lifespan -= agingRate;
+    life -= agingRate;
   }
 
   //displays particle
@@ -134,8 +139,9 @@ class Particle {
     popMatrix();
   }
   
+  //makes particle isDead if life is <= 0
   boolean isDead() {
-    if (lifespan<=0){
+    if (life<=0){
       return true;
     }
     else {

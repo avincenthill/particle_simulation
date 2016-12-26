@@ -4,22 +4,27 @@
 //imports libraries
 import peasy.*;
 
-//simulation global variables
-float simSize = 1000;
-float halfSimSize = simSize/2;
-float volumeFudgeFactor = 0.95;
-float simVolume = pow(simSize*volumeFudgeFactor,3);
-float adjustedHalfSimSize = volumeFudgeFactor*halfSimSize;
-boolean gravityToggle = false;
-float gravitationalConstant = 1;
-int textSize = 40;
-//n is the number of particles in the simulation
-int n = 10;
-//adds PeasyCam object
-PeasyCam cam;
-
 //declares particle system
 ParticleSystem ps;
+
+//n is the number of particles in the simulation
+int n = 10;
+
+//simulation dimensions
+float simSize = 1000;
+float volumeFudgeFactor = 0.95;
+float simVolume = pow(simSize*volumeFudgeFactor,3);
+float adjustedHalfSimSize = volumeFudgeFactor*simSize/2;
+
+//simulation global variables
+boolean gravityToggle = true;
+
+//simulation text formatting
+int textSize = 40;
+String gravityToggleText;
+
+//adds PeasyCam object
+PeasyCam cam;
 
 void setup() {
   //sets window size and rendering mode
@@ -49,7 +54,7 @@ void draw() {
   writeTextToSim(textSize);
   
   //draws box
-  drawSimBox(halfSimSize);
+  drawSimBox();
   
   //runs particle system
   ps.psrun();

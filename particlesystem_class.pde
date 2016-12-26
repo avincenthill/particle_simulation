@@ -4,6 +4,8 @@
 class ParticleSystem {
   //system variables
   PVector origin;
+  
+  //TBD: make temperature a function of particle system
   float temperature = 0;
   
   //creates ArrayList of Particles
