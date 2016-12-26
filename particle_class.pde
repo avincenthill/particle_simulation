@@ -18,9 +18,9 @@ class Particle {
   float charge = 1;
   float bindingEnergy;
   
-  float elasticity = 0.99;
+  float elasticity = 0.95;
   float mu = 0.999;
-  float drag = 0.999;
+  float drag = 1;
   
   float agingRate = 0;
   float life;
@@ -63,6 +63,9 @@ class Particle {
     //updates momentum
     momentum = velocity.copy().mult(mass);
     
+    //updates velocity?
+    velocity = momentum.copy().mult(1/mass);
+    
     //updates KE (1/2mv^2)
     kineticEnergy = abs(0.5*mass*velocity.magSq());
     
@@ -101,11 +104,17 @@ class Particle {
   }
   
   //bounces particles
+  //TBD: conserve momentum, make physical
   void bounce(Particle otherParticle){
     //swaps particles velocities
     PVector tempVelocity = velocity;
-    velocity = otherParticle.velocity.mult(elasticity);
-    otherParticle.velocity = tempVelocity.mult(elasticity);
+    velocity = otherParticle.velocity;
+    otherParticle.velocity = tempVelocity;
+    
+    ////swaps particles momentums
+    //PVector tempMomentum = momentum;
+    //velocity = otherParticle.momentum;
+    //otherParticle.momentum = tempMomentum;
     
     PVector interparticleDistance = PVector.sub(otherParticle.position,position);
     interparticleDistance.setMag((radius + otherParticle.radius)/2 - 0.5);

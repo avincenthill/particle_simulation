@@ -8,10 +8,11 @@ import peasy.*;
 float simSize = 1000;
 float halfSimSize = simSize/2;
 float volumeFudgeFactor = 0.95;
-float simVolume = pow(simSize*volumeFudgeFactor,3);
+float volume = pow(simSize*volumeFudgeFactor,3);
 float adjustedHalfSimSize = volumeFudgeFactor*halfSimSize;
 boolean gravityToggle = false;
 float gravitationalConstant = 1;
+float idealGasConstant = 1;
 int textSize = 40;
 //n is the number of particles in the simulation
 int n = 10;

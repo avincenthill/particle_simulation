@@ -9,11 +9,12 @@ void writeTitle(){
 void writeTextToSim(int textSize){
   fill(0,0,100);
   textSize(textSize*2);
-  text("particle_simulation", -500, -500-(textSize)*11, -500);
+  text("particle_simulation", -500, -500-(textSize)*12, -500);
   textSize(textSize);
-  text("  by Alex Vincent-Hill", -500, -500-(textSize)*10, -500);
-  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", -500, -500-(textSize)*8, -500);
-  text("Simulation temperature currently " + round(ps.temperature), -500, -500-(textSize)*7, -500);
+  text("  by Alex Vincent-Hill", -500, -500-(textSize)*11, -500);
+  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", -500, -500-(textSize)*9, -500);
+  text("Simulation temperature currently " + round(ps.temperature), -500, -500-(textSize)*8, -500);
+  text("Simulation pressure currently " + round(ps.pressure), -500, -500-(textSize)*7, -500);
 
   text("Hold \"q\" to add particles.", -500, -500-(textSize)*5, -500);
   text("Press \"r\" to restart with " + n + " particles.", -500, -500-(textSize)*4, -500);

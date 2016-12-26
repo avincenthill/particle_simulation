@@ -6,7 +6,8 @@ class ParticleSystem {
   PVector origin;
   
   //TBD: make temperature a function of particle system
-  float temperature = 0;
+  float temperature;
+  float pressure;
   
   //creates ArrayList of Particles
   ArrayList<Particle> particleList;
@@ -24,6 +25,13 @@ class ParticleSystem {
     }
   }
   
+  //removes one particle (given by index) from ArrayList particleList
+  void removeParticle(int i) {
+    if (i >= 0 && i <= particleList.size()-1){
+      particleList.remove(i);
+    }
+  }
+  
   //removes all particles from ArrayList particleList
   void removeAllParticles() {
       for (int i = particleList.size()-1; i >= 0; i--) {
@@ -33,7 +41,6 @@ class ParticleSystem {
   
   //updates particle system
   void psrun() {
-    
     //applies run method to every Particle in particleList
     for (int i = particleList.size()-1; i >= 0; i--) {
       Particle p = particleList.get(i);
@@ -55,6 +62,9 @@ class ParticleSystem {
       
       //averages summed KEs to get system temperature
       temperature = round(temperature/particleList.size());
+      
+      //uses ideal gas law to calculate pressure
+      pressure = round((particleList.size()*idealGasConstant*temperature)/volume);
       
       //runs particles
       p.run();
