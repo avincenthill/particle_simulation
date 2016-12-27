@@ -18,10 +18,9 @@ class Particle {
   float charge = 1;
   float bindingEnergy;
   
-  //friction losses
   float elasticity = 0.999;
   float mu = 0.999;
-  float drag = .8;
+  float drag = 1;
   
   float agingRate = 0;
   float life;
@@ -66,7 +65,7 @@ class Particle {
     velocity = momentum.copy().mult(1/mass);
     
     //updates KE (1/2mv^2)
-    kineticEnergy = abs(0.5*mass*velocity.magSq());
+    kineticEnergy = 0.5*mass*velocity.magSq();
     
     //updates GPE (mgh)
     gravitationalPotentialEnergy = mass * gravitationalConstant * ((halfSimSize)-position.y);
@@ -98,33 +97,22 @@ class Particle {
   }
   
   //collision event specified in particle system
-  void collide(Particle otherParticle){
-    //println("Bang! @ " + frameCount);
+  void collide(Particle otherParticleB){
   }
   
   //bounces particles
   void bounce(Particle otherParticleB){
-
-    float bounceTotalMassAB = mass + otherParticleB.mass;
-    float radiusBounce = radius + otherParticleB.radius;
+    //conserve momentum and KE (http://web.mit.edu/8.01t/www/materials/modules/chapter15.pdf)
     
     PVector initialVelocityA = velocity.copy();
     PVector initialVelocityB = otherParticleB.velocity.copy();
-    PVector initialPositionA = position.copy();
-    PVector initialPositionB = otherParticleB.position.copy();
+    float totalMassAB = mass + otherParticleB.mass;
+    velocity = initialVelocityA.mult((mass - otherParticleB.mass)/totalMassAB).add(initialVelocityB.mult((2*otherParticleB.mass)/totalMassAB)).mult(elasticity);
     
-    //conserves KE and momentum (http://web.mit.edu/8.01t/www/materials/modules/chapter15.pdf) //<>//
-    velocity = initialVelocityA.mult((mass - otherParticleB.mass)/bounceTotalMassAB).add(initialVelocityB.mult((2 * otherParticleB.mass)/bounceTotalMassAB)).mult(elasticity);
-    otherParticleB.velocity = initialVelocityB.mult((otherParticleB.mass - mass)/bounceTotalMassAB).add(initialVelocityA.mult((2 * mass)/bounceTotalMassAB)).mult(elasticity);
-
-    PVector interparticleDistanceAB = PVector.sub(initialPositionB, initialPositionA);
-    interparticleDistanceAB.setMag(radiusBounce);
-    otherParticleB.position = initialPositionA.add(interparticleDistanceAB);
-    
-    PVector interparticleDistanceBA = PVector.sub(initialPositionA, initialPositionB);
-    interparticleDistanceBA.setMag(radiusBounce);
-    position = initialPositionB.add(interparticleDistanceBA);
-    //TEST //<>//
+    //makes sure particles don't get stuck in each other
+    PVector interparticleDistance = PVector.sub(otherParticleB.position,position);
+    interparticleDistance.setMag((radius + otherParticleB.radius + 1));
+    otherParticleB.position = position.add(interparticleDistance);
   }
 
   //ages particle by agingRate
