@@ -5,16 +5,13 @@ class ParticleSystem {
   //system variables
   PVector origin;
   
-  //TBD: make temperature a function of particle system
+  //TBD: make these lambda functions
   float temperature;
   float sumKE;
   float pressure;
 
   //creates ArrayList of Particles
   ArrayList<Particle> particleList;
-  
-  //array of what collided with what
-  int[] collisionList = new int[9999];
   
   //constructs particle system
   ParticleSystem(){
@@ -25,13 +22,13 @@ class ParticleSystem {
   //adds n particles to ArrayList particleList
   void addParticles(int n) {
       for (int i = 0; i < n; i++) {
-        particleList.add(new Particle(i));
+        particleList.add(new Particle(particleList.size()));
     }
   }
   
   //removes one particle (given by index) from ArrayList particleList
   void removeParticle(int i) {
-    if (i >= 0 && i <= particleList.size()-1){
+    if (i >= 0 && i <= particleList.size()){
       particleList.remove(i);
     }
   }
@@ -62,9 +59,8 @@ class ParticleSystem {
         
         float distBetweenParticles = p.position.dist(otherParticle.position);
         if (distBetweenParticles <= p.radius + otherParticle.radius &&
-            collisionList[i] != j && collisionList[j] != i){
-            collisionList[i] = j;
-            collisionList[j] = i;
+            p.id != otherParticle.id
+            ){
             p.collide(otherParticle);
             p.bounce(otherParticle);
         }
@@ -82,12 +78,6 @@ class ParticleSystem {
       //removes dead particles
       if (p.isDead()) {
         particleList.remove(i);
-      }
-      //resets collision list for next loop
-      if (frameCount % 2 == 0) {
-        for (int k = collisionList.length - 1; k >= 0; k--) {
-          collisionList[k] = 0;
-        }
       }
     }
   }

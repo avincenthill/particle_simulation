@@ -15,7 +15,7 @@ float gravitationalConstant = 1;
 float idealGasConstant = 1;
 int textSize = 40;
 //n is the number of particles in the simulation
-int n = 10;
+int n = 100;
 //adds PeasyCam object
 PeasyCam cam;
 

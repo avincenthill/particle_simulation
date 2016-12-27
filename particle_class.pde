@@ -19,9 +19,9 @@ class Particle {
   float bindingEnergy;
   
   //friction losses
-  float elasticity = 0.999;
+  float elasticity = 0.8;
   float mu = 0.999;
-  float drag = .8;
+  float drag = 1;
   
   float agingRate = 0;
   float life;
@@ -36,7 +36,7 @@ class Particle {
     velocity = new PVector(random(-10,10), random(-10,10), random (-10,10));
     acceleration = new PVector(0,0,0);
     life = 100;
-    mass = random(1000,100000);
+    mass = 50000;
     id = setID;
   }
 
@@ -57,7 +57,9 @@ class Particle {
     velocity.add(acceleration);
     velocity.mult(drag);
     position.add(velocity);
-    acceleration.mult(.5);
+    
+    //clears acceleration for next loop
+    acceleration.mult(0);
     
     //updates momentum
     momentum = velocity.copy().mult(mass);
@@ -104,27 +106,42 @@ class Particle {
   
   //bounces particles
   void bounce(Particle otherParticleB){
-
+    //temp variables for collision math
     float bounceTotalMassAB = mass + otherParticleB.mass;
     float radiusBounce = radius + otherParticleB.radius;
+    float reducedMassAB = (mass * otherParticleB.mass)/(mass + otherParticleB.mass);
     
+    //temp velocity vectors for collision math
     PVector initialVelocityA = velocity.copy();
     PVector initialVelocityB = otherParticleB.velocity.copy();
     PVector initialPositionA = position.copy();
     PVector initialPositionB = otherParticleB.position.copy();
-    
-    //conserves KE and momentum (http://web.mit.edu/8.01t/www/materials/modules/chapter15.pdf) //<>//
-    velocity = initialVelocityA.mult((mass - otherParticleB.mass)/bounceTotalMassAB).add(initialVelocityB.mult((2 * otherParticleB.mass)/bounceTotalMassAB)).mult(elasticity);
-    otherParticleB.velocity = initialVelocityB.mult((otherParticleB.mass - mass)/bounceTotalMassAB).add(initialVelocityA.mult((2 * mass)/bounceTotalMassAB)).mult(elasticity);
-
+ //<>//
+    //makes sure particles aren't overlapping after collision
     PVector interparticleDistanceAB = PVector.sub(initialPositionB, initialPositionA);
     interparticleDistanceAB.setMag(radiusBounce);
     otherParticleB.position = initialPositionA.add(interparticleDistanceAB);
-    
     PVector interparticleDistanceBA = PVector.sub(initialPositionA, initialPositionB);
     interparticleDistanceBA.setMag(radiusBounce);
-    position = initialPositionB.add(interparticleDistanceBA);
-    //TEST //<>//
+    position = initialPositionB.add(interparticleDistanceBA); //<>//
+    
+    //wikipedia solution to vector collisions (https://en.wikipedia.org/wiki/Elastic_collision)
+    //float dotProductAB = initialVelocityA.sub(initialVelocityB).dot(interparticleDistanceAB);
+    //float dotProductBA = initialVelocityB.sub(initialVelocityA).dot(interparticleDistanceBA);
+    //float posDifMagSqAB = pow(initialPositionB.sub(initialPositionA).mag(),2);
+    //float posDifMagSqBA = pow(initialPositionA.sub(initialPositionB).mag(),2);
+    //float collMassScalarAB = (2*otherParticleB.mass)/bounceTotalMassAB;
+    //float collMassScalarBA = (2*mass)/bounceTotalMassAB;
+    //velocity = initialVelocityA.sub(interparticleDistanceAB.mult(collMassScalarAB*(dotProductAB/posDifMagSqAB)));
+    //otherParticleB.velocity = initialVelocityB.sub(interparticleDistanceBA.mult(collMassScalarBA*(dotProductBA/posDifMagSqBA)));
+    
+    //MIT solution to conserve KE and momentum (http://web.mit.edu/8.01t/www/materials/modules/chapter15.pdf)
+    //velocity = initialVelocityA.mult((mass - otherParticleB.mass)/bounceTotalMassAB).add(initialVelocityB.mult((2 * otherParticleB.mass)/bounceTotalMassAB)).mult(elasticity);
+    //otherParticleB.velocity = initialVelocityB.mult((otherParticleB.mass - mass)/bounceTotalMassAB).add(initialVelocityA.mult((2 * mass)/bounceTotalMassAB)).mult(elasticity);
+
+    //velocity swapping solution
+    velocity = initialVelocityB.mult(elasticity);
+    otherParticleB.velocity = initialVelocityA.mult(elasticity);
   }
 
   //ages particle by agingRate

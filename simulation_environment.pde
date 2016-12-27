@@ -7,20 +7,21 @@ void writeTitle(){
 }
 
 void writeTextToSim(int textSize){
+  float[] textPos = {-500 + textSize, textSize*2, -500};
   fill(0,0,100);
   textSize(textSize*2);
-  text("particle_simulation", -500, -500-(textSize)*12, -500);
+  text("particle_simulation", textPos[0], textPos[1]-(textSize)*12, textPos[2]);
   textSize(textSize);
-  text("  by Alex Vincent-Hill", -500, -500-(textSize)*11, -500);
-  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", -500, -500-(textSize)*9, -500);
-  text("Simulation temperature currently " + round(ps.temperature), -500, -500-(textSize)*8, -500);
-  text("Simulation pressure currently " + round(ps.pressure), -500, -500-(textSize)*7, -500);
+  text("  by Alex Vincent-Hill", textPos[0], textPos[1]-(textSize)*11, textPos[2]);
+  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", textPos[0], textPos[1]-(textSize)*9, textPos[2]);
+  text("Simulation temperature currently " + round(ps.temperature), textPos[0], textPos[1]-(textSize)*8, textPos[2]);
+  text("Simulation pressure currently " + round(ps.pressure), textPos[0], textPos[1]-(textSize)*7, textPos[2]);
 
-  text("Hold \"q\" to add particles.", -500, -500-(textSize)*5, -500);
-  text("Press \"r\" to restart with " + n + " particles.", -500, -500-(textSize)*4, -500);
+  text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
+  text("Press \"r\" to restart with " + n + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
   
-  text("Hold \"SPACE\" to turn off gravity.", -500, -500-(textSize)*2, -500);
-  text("Hold \"w,a,s,d\" to add wind forces.", -500, -500-(textSize)*1, -500);
+  text("Hold \"SPACE\" to turn off gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
+  text("Hold \"w,a,s,d\" to add wind forces.", textPos[0], textPos[1]-(textSize)*1, textPos[2]);
 }
 
 //TBD: add passed variable to this function
