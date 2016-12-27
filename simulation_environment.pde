@@ -7,7 +7,7 @@ void writeTitle(){
 }
 
 void writeTextToSim(int textSize){
-  float[] textPos = {-500 + textSize, textSize*2, -500};
+  float[] textPos = {-500, -500, -500};
   fill(0,0,100);
   textSize(textSize*2);
   text("particle_simulation", textPos[0], textPos[1]-(textSize)*12, textPos[2]);

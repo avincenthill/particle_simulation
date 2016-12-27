@@ -1,6 +1,8 @@
 // Based on code by Daniel Shiffman
 // Alex Vincent-Hill
 
+//TBD: rewrite x.mult(y) as PVector.mult(x,y) for mult, add, sub, div, everything that returns vectors
+
 //imports libraries
 import peasy.*;
 

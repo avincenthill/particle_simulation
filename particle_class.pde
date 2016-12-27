@@ -108,8 +108,8 @@ class Particle {
   void bounce(Particle otherParticleB){
     //temp variables for collision math
     float bounceTotalMassAB = mass + otherParticleB.mass;
-    float radiusBounce = radius + otherParticleB.radius;
-    float reducedMassAB = (mass * otherParticleB.mass)/(mass + otherParticleB.mass);
+    float bounceReducedMassAB = (mass * otherParticleB.mass)/(mass + otherParticleB.mass);
+    float bounceTotalRadius = radius + otherParticleB.radius;
     
     //temp velocity vectors for collision math
     PVector initialVelocityA = velocity.copy();
@@ -119,10 +119,10 @@ class Particle {
  //<>//
     //makes sure particles aren't overlapping after collision
     PVector interparticleDistanceAB = PVector.sub(initialPositionB, initialPositionA);
-    interparticleDistanceAB.setMag(radiusBounce);
+    interparticleDistanceAB.setMag(bounceTotalRadius);
     otherParticleB.position = initialPositionA.add(interparticleDistanceAB);
     PVector interparticleDistanceBA = PVector.sub(initialPositionA, initialPositionB);
-    interparticleDistanceBA.setMag(radiusBounce);
+    interparticleDistanceBA.setMag(bounceTotalRadius);
     position = initialPositionB.add(interparticleDistanceBA); //<>//
     
     //wikipedia solution to vector collisions (https://en.wikipedia.org/wiki/Elastic_collision)
@@ -140,8 +140,8 @@ class Particle {
     //otherParticleB.velocity = initialVelocityB.mult((otherParticleB.mass - mass)/bounceTotalMassAB).add(initialVelocityA.mult((2 * mass)/bounceTotalMassAB)).mult(elasticity);
 
     //velocity swapping solution
-    velocity = initialVelocityB.mult(elasticity);
-    otherParticleB.velocity = initialVelocityA.mult(elasticity);
+    velocity = PVector.mult(initialVelocityB,elasticity);
+    otherParticleB.velocity = PVector.mult(initialVelocityB,elasticity);
   }
 
   //ages particle by agingRate

@@ -2,7 +2,7 @@
 // Alex Vincent-Hill
 
 //gravity
-float gravityMag = 1;
+float gravityMag = 0;
 PVector gravity = new PVector (0,gravityMag,0);
 PVector antigravity = new PVector (0,-gravityMag,0);
 

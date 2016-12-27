@@ -3,7 +3,7 @@
 
 class ParticleSystem {
   //system variables
-  PVector origin;
+  PVector origin = new PVector (0,0,0);
   
   //TBD: make these lambda functions
   float temperature;
