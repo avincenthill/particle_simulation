@@ -1,4 +1,4 @@
-// Based on code by Daniel Shiffman //<>// //<>//
+// Based on code by Daniel Shiffman //<>// //<>// //<>//
 // Alex Vincent-Hill and Roberto Nunez
 
 class Particle {
@@ -26,7 +26,8 @@ class Particle {
   float agingRate = 0;
   float life = 100;
   
-  boolean bouncesOffWalls = true;
+  boolean bouncesOffParticles = true;
+  boolean bouncesOffWalls = false;
   boolean deletesOnWalls = false;
   boolean fissionable = false;
 
@@ -90,19 +91,16 @@ class Particle {
       velocity.x = elasticity*velocity.x * -1;
       velocity.y = coefficientSlidingFriction*velocity.y;
       velocity.z = coefficientSlidingFriction*velocity.z;
-      position.x = constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     }
     if ((position.y + radius >= adjustedHalfSimSize) || (position.y - radius <= -adjustedHalfSimSize)) {
       velocity.y = elasticity*velocity.y * -1;
       velocity.x = coefficientSlidingFriction*velocity.x;
       velocity.z = coefficientSlidingFriction*velocity.z;
-      position.y = constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     }
     if ((position.z + radius >= adjustedHalfSimSize) || (position.z - radius <= -adjustedHalfSimSize)) {
       velocity.z = elasticity*velocity.z * -1;
       velocity.x = coefficientSlidingFriction*velocity.x;
       velocity.y = coefficientSlidingFriction*velocity.y;
-      position.z = constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     }
   }
   
@@ -116,29 +114,30 @@ class Particle {
 
   //collision event specified in particle system
   void collide(Particle otherParticle) {
-    //println("Bang! @ " + frameCount);
   }
 
   //bounces particles
   void bounce(Particle otherParticleB) {
-    //temp variables for collision math
-    float bounceTotalMassAB = mass + otherParticleB.mass;
-    float bounceTotalRadius = radius + otherParticleB.radius;
-
-    //temp velocity vectors for collision math
-    PVector initialVelocityA = velocity.copy();
-    PVector initialVelocityB = otherParticleB.velocity.copy();
-    PVector initialPositionA = position.copy();
-    PVector initialPositionB = otherParticleB.position.copy();
-
-    //makes sure particles aren't overlapping after collision
-    PVector interparticleDistanceAB = PVector.sub(initialPositionB, initialPositionA);
-    interparticleDistanceAB.setMag(bounceTotalRadius);
-    otherParticleB.position = initialPositionA.add(interparticleDistanceAB);
-
-    //MIT solution to conserve KE and momentum (http://web.mit.edu/8.01t/www/materials/modules/chapter15.pdf)
-    velocity = initialVelocityA.copy().mult((mass - otherParticleB.mass)/bounceTotalMassAB).copy().add(initialVelocityB.copy().mult((2 * otherParticleB.mass)/bounceTotalMassAB)).copy().mult(elasticity);
-    otherParticleB.velocity = initialVelocityB.copy().mult((otherParticleB.mass - mass)/bounceTotalMassAB).copy().add(initialVelocityA.copy().mult((2 * mass)/bounceTotalMassAB)).copy().mult(elasticity);
+    if (bouncesOffParticles && otherParticleB.bouncesOffParticles){
+      //temp variables for collision math
+      float bounceTotalMassAB = mass + otherParticleB.mass;
+      float bounceTotalRadius = radius + otherParticleB.radius;
+  
+      //temp velocity vectors for collision math
+      PVector initialVelocityA = velocity.copy();
+      PVector initialVelocityB = otherParticleB.velocity.copy();
+      PVector initialPositionA = position.copy();
+      PVector initialPositionB = otherParticleB.position.copy();
+  
+      //makes sure particles aren't overlapping after collision
+      PVector interparticleDistanceAB = PVector.sub(initialPositionB, initialPositionA);
+      interparticleDistanceAB.setMag(bounceTotalRadius);
+      otherParticleB.position = initialPositionA.copy().add(interparticleDistanceAB);
+  
+      //MIT solution to conserve KE and momentum (http://web.mit.edu/8.01t/www/materials/modules/chapter15.pdf)
+      velocity = initialVelocityA.copy().mult((mass - otherParticleB.mass)/bounceTotalMassAB).copy().add(initialVelocityB.copy().mult((2 * otherParticleB.mass)/bounceTotalMassAB)).copy().mult(elasticity);
+      otherParticleB.velocity = initialVelocityB.copy().mult((otherParticleB.mass - mass)/bounceTotalMassAB).copy().add(initialVelocityA.copy().mult((2 * mass)/bounceTotalMassAB)).copy().mult(elasticity);
+    }
   }
 
   //ages particle by agingRate
@@ -159,7 +158,13 @@ class Particle {
     
     //draws particle as a sphere
     noStroke();
+    
+    //constrains particles to bounds before render
+    position.x = constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
+    position.y = constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
+    position.z = constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     translate(position.x, position.y, position.z);
+    
     sphere(radius);
 
     popMatrix();

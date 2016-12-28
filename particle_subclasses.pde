@@ -4,36 +4,41 @@
 //TBD: make sure fissioned mass is half fissionable - 2 neutron masses
 
 class FissionableParticle extends Particle {
-  //class variables to change from Particle
-  float mass;
-  float radius;
-  boolean fissionable = true;
-
   //FissionableParticle constructor
   FissionableParticle(int setID) {
+    //class variables to change from Particle
     super(setID);
+    this.fissionable = true;
+  }
+  
+  void collision(Particle otherParticle){
+    if (otherParticle instanceof Neutron){
+      fission((Neutron) otherParticle);
+    }
+  }
+  
+  //TBD: not printing fizz
+  void fission(Neutron neutron){
+    //TBD: make fission physics
+    println("fizz @ " + frameCount);
   }
 }
 
 class Neutron extends Particle {
-  //class variables to change from Particle
-  float mass;
-  float radius;
-  boolean deletesOnWalls = true;
-
   //Neutron constructor
   Neutron(int setID) {
     super(setID);
+    //class variables to change from Particle
+    this.deletesOnWalls = true;
+    this.bouncesOffParticles = false;
+    this.mass = 1000;
   }
 }
 
 class DrDevice extends Particle {
-  //class variables to change from Particle
-  float mass;
-  float radius;
-
   //DrDevice constructor
   DrDevice(int setID) {
     super(setID);
+    //class variables to change from Particle
   }
 }

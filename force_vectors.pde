@@ -1,6 +1,8 @@
 // Based on code by Daniel Shiffman
 // Alex Vincent-Hill and Roberto Nunez
 
+//TBD: make gravity toggle
+
 //gravity
 float gravityMag = 1;
 PVector gravity = new PVector (0, gravityMag, 0);

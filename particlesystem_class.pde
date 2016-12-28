@@ -22,7 +22,8 @@ class ParticleSystem {
   //adds n particles to ArrayList particleList
   void addParticles(int n) {
     for (int i = 0; i < n; i++) {
-      particleList.add(new Particle(particleList.size()));
+      particleList.add(new FissionableParticle (particleList.size()));
+      particleList.add(new Neutron (particleList.size()));
     }
   }
 
