@@ -1,23 +1,27 @@
 // Based on code by Daniel Shiffman
-// Alex Vincent-Hill
+// Alex Vincent-Hill and Roberto Nunez
 
-//TBD: rewrite x.mult(y) as PVector.mult(x,y) for mult, add, sub, div, everything that returns vectors
+//TBD: build a clock that uses seconds
 
 //imports libraries
 import peasy.*;
 
-//simulation global variables
+//n is the number of particles in the simulation
+int n = 100;
+
+//simulation variables
 float simSize = 1000;
 float halfSimSize = simSize/2;
-float volumeFudgeFactor = 0.95;
-float volume = pow(simSize*volumeFudgeFactor,3);
+float volumeFudgeFactor = 0.9;
+float volume = pow(simSize*volumeFudgeFactor, 3);
 float adjustedHalfSimSize = volumeFudgeFactor*halfSimSize;
 boolean gravityToggle = false;
 float gravitationalConstant = 1;
 float idealGasConstant = 1;
+
+//text formatting
 int textSize = 40;
-//n is the number of particles in the simulation
-int n = 100;
+
 //adds PeasyCam object
 PeasyCam cam;
 
@@ -27,16 +31,16 @@ ParticleSystem ps;
 void setup() {
   //sets window size and rendering mode
   size(1000, 1000, P3D);
-  
+
   //sets color mode
-  colorMode(HSB,360,100,100);
-  
+  colorMode(HSB, 360, 100, 100);
+
   //initializes cam and orients view
   simCam(cam);
-  
+
   //starts background black
   background(0);
-  
+
   //initializes particle system
   ps = new ParticleSystem();
 }
@@ -44,19 +48,19 @@ void setup() {
 void draw() {
   //writes title
   writeTitle();
-  
+
   //wipes background black
   background(0);
-  
+
   //displays text in simulation area
   writeTextToSim(textSize);
   
   //draws box
   drawSimBox(halfSimSize);
-  
+
   //runs particle system
   ps.psrun();
-  
+
   //user I/O
   userIO();
 }
