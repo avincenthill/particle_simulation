@@ -31,7 +31,7 @@ class ParticleSystem {
         particleList.size(),  //ID
         new PVector(0,0,0), //position
         new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
-        random(1000,10000) //mass
+        random(100,10000) //mass
         )
         );
     }

@@ -22,7 +22,7 @@ void writeTextToSim(int textSize) {
 
   text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
   text("Press \"r\" to restart with " + n + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
-
+  text("Press \"n\" to inject a neutron.", textPos[0], textPos[1]-(textSize)*3, textPos[2]);
   text("Hold \"SPACE\" to toggle gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
   text("Hold \"w,a,s,d\" to add wind forces.", textPos[0], textPos[1]-(textSize)*1, textPos[2]);
 }
