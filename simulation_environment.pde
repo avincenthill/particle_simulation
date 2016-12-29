@@ -23,7 +23,7 @@ void writeTextToSim(int textSize) {
   text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
   text("Press \"r\" to restart with " + n + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
 
-  text("Hold \"SPACE\" to turn off gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
+  text("Hold \"SPACE\" to toggle gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
   text("Hold \"w,a,s,d\" to add wind forces.", textPos[0], textPos[1]-(textSize)*1, textPos[2]);
 }
 
@@ -113,11 +113,14 @@ void userIO() {
   }
 
   //removes gravity force with "SPACE" hold
-  ps.applyForce(gravity);
-  if (keyPressed) {
-    if (key == ' ') {
-      ps.applyForce(antigravity);
-    }
+  if (gravityToggle){
+      ps.applyForce(gravity);
+  }
+}
+
+void keyReleased(){
+  if (key == 32){
+    gravityToggle = !gravityToggle;
   }
 }
 

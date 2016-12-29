@@ -1,4 +1,4 @@
-// Based on code by Daniel Shiffman //<>// //<>// //<>//
+// Based on code by Daniel Shiffman //<>//
 // Alex Vincent-Hill and Roberto Nunez
 
 class Particle {
@@ -27,13 +27,13 @@ class Particle {
   float life = 100;
   
   boolean bouncesOffParticles = true;
-  boolean bouncesOffWalls = false;
+  boolean bouncesOffWalls = true;
   boolean deletesOnWalls = false;
   boolean fissionable = false;
 
   //Particle constructor
   Particle(int setID) {
-    position = new PVector(0, 0, 0);
+    position = new PVector(random(-100, 100), random(-100, 100), random(-100, 100));
     velocity = new PVector(random(-10, 10), random(-10, 10), random (-10, 10));
     acceleration = new PVector(0, 0, 0);
     mass = random(1000, 100000);

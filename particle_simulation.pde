@@ -5,6 +5,10 @@
 
 //imports libraries
 import peasy.*;
+import peasy.org.apache.commons.math.*;
+import peasy.org.apache.commons.math.geometry.*;
+
+//import apache math?
 
 //n is the number of particles in the simulation
 int n = 100;

@@ -5,10 +5,13 @@ class ParticleSystem {
   //system variables
   PVector origin = new PVector (0, 0, 0);
 
-  //TBD: make these lambda functions
+  float pressure;
   float temperature;
   float sumKE;
-  float pressure;
+  int numSmoothingFrames = 10;
+  //DescriptiveStatistics avgTemperature;
+  //DescriptiveStatistics avgPressure;
+
 
   //creates ArrayList of Particles
   ArrayList<Particle> particleList;
@@ -17,6 +20,8 @@ class ParticleSystem {
   ParticleSystem() {
     //constructs particleList
     particleList = new ArrayList<Particle>();
+    //avgTemperature = new DescriptiveStatistics(numSmoothingFrames);
+    //avgPressure = new DescriptiveStatistics(numSmoothingFrames);
   }
 
   //adds n particles to ArrayList particleList
@@ -67,14 +72,6 @@ class ParticleSystem {
         }
       }
 
-      //averages summed KEs to get system temperature
-      temperature = sumKE/particleList.size();
-
-      //uses ideal gas law to calculate pressure
-      pressure = ((particleList.size()*idealGasConstant*temperature)/volume)*pow(10, 3);
-      
-      //TBD: smoothes pressure and temperature (and KE in Particle loop?)
-
       //runs particles
       p.run();
 
@@ -91,4 +88,42 @@ class ParticleSystem {
       p.applyForce(force);
     }
   }
+
+  //float calcTemperature() {
+  //  avgTemperature.add(sumKE/particleList.size());
+  //  println(avgTemperature.getAverage());
+  //  return avgTemperature.getAverage();
+  //}
+
+  //float calcPressure(float numFrames){
+  //float pressure = ((particleList.size()*idealGasConstant*temperature)/volume)*pow(10, 3);
+  //}
 }
+
+////rolling average class from (http://stackoverflow.com/questions/3793400/is-there-a-function-in-java-to-get-moving-average)
+//public class Rolling {
+
+//    private int size;
+//    private float total = 0f;
+//    private int index = 0;
+//    private float samples[];
+
+//    public Rolling(int size) {
+//        this.size = size;
+//        samples = new float[size];
+//        for (int i = 0; i < size; i++) samples[i] = 0f;
+//    }
+
+//    public void add(float x) {
+//        total -= samples[index];
+//        samples[index] = x;
+//        println(samples);
+//        total += x;
+//        println(total);
+//        if (++index == size) index = 0; // cheaper than modulus
+//    }
+
+//    public float getAverage() {
+//        return (float)(total / size);
+//    }   
+//}
