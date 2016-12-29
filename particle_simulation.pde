@@ -2,13 +2,14 @@
 // Alex Vincent-Hill and Roberto Nunez
 
 //TBD: build a clock that uses seconds
+//TBD: put on the web with processing.js
 
 //imports libraries
 import peasy.*;
 import peasy.org.apache.commons.math.*;
 import peasy.org.apache.commons.math.geometry.*;
 
-//import apache math?
+//TBD: import apache math
 
 //n is the number of particles in the simulation
 int n = 100;
@@ -34,7 +35,7 @@ ParticleSystem ps;
 
 void setup() {
   //sets window size and rendering mode
-  size(1000, 1000, P3D);
+  size(1500, 1500, P3D);
 
   //sets color mode
   colorMode(HSB, 360, 100, 100);

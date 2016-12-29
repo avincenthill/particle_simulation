@@ -30,6 +30,10 @@ class Particle {
   boolean bouncesOffWalls = true;
   boolean deletesOnWalls = false;
   boolean fissionable = false;
+  
+  //data smoothing
+  int numSmoothingFrames = 25;
+  DescriptiveStatistics avgKE;
 
   //Particle constructor
   Particle(int setID) {
@@ -38,6 +42,7 @@ class Particle {
     acceleration = new PVector(0, 0, 0);
     mass = random(1000, 100000);
     id = setID;
+    avgKE = new DescriptiveStatistics(numSmoothingFrames);
   }
 
   void applyForce(PVector force) {
@@ -76,7 +81,8 @@ class Particle {
     velocity = momentum.copy().mult(1/mass);
 
     //updates KE (1/2mv^2)
-    kineticEnergy = abs(0.5*mass*velocity.magSq());
+    avgKE.addValue(abs(0.5*mass*velocity.magSq()));
+    kineticEnergy = (float) avgKE.getMean();
 
     //updates GPE (mgh)
     gravitationalPotentialEnergy = mass * gravitationalConstant * ((halfSimSize)-position.y);

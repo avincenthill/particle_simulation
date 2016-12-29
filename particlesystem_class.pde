@@ -4,13 +4,12 @@
 class ParticleSystem {
   //system variables
   PVector origin = new PVector (0, 0, 0);
-
-  float pressure;
-  float temperature;
+  float pressure = 0;
+  float temperature = 0f;
   float sumKE;
-  int numSmoothingFrames = 10;
-  //DescriptiveStatistics avgTemperature;
-  //DescriptiveStatistics avgPressure;
+  int numSmoothingFrames = 100;
+  DescriptiveStatistics avgTemperature;
+  DescriptiveStatistics avgPressure;
 
 
   //creates ArrayList of Particles
@@ -20,15 +19,14 @@ class ParticleSystem {
   ParticleSystem() {
     //constructs particleList
     particleList = new ArrayList<Particle>();
-    //avgTemperature = new DescriptiveStatistics(numSmoothingFrames);
-    //avgPressure = new DescriptiveStatistics(numSmoothingFrames);
+    avgTemperature = new DescriptiveStatistics(numSmoothingFrames);
+    avgPressure = new DescriptiveStatistics(numSmoothingFrames);
   }
 
   //adds n particles to ArrayList particleList
   void addParticles(int n) {
     for (int i = 0; i < n; i++) {
-      particleList.add(new FissionableParticle (particleList.size()));
-      particleList.add(new Neutron (particleList.size()));
+      particleList.add(new Particle (particleList.size()));
     }
   }
 
@@ -79,6 +77,11 @@ class ParticleSystem {
       if (p.isDead()) {
         particleList.remove(i);
       }
+
+      //setting running average of temperatures and pressures
+      temperature = calcTemperature();
+      pressure = calcPressure();
+
     }
   }
 
@@ -89,41 +92,13 @@ class ParticleSystem {
     }
   }
 
-  //float calcTemperature() {
-  //  avgTemperature.add(sumKE/particleList.size());
-  //  println(avgTemperature.getAverage());
-  //  return avgTemperature.getAverage();
-  //}
+  float calcTemperature() {
+    avgTemperature.addValue(sumKE/particleList.size());
+    return (float) avgTemperature.getMean();
+  }
 
-  //float calcPressure(float numFrames){
-  //float pressure = ((particleList.size()*idealGasConstant*temperature)/volume)*pow(10, 3);
-  //}
+  float calcPressure() {
+    avgPressure.addValue(((particleList.size()*idealGasConstant*temperature)/volume)*pow(10, 3));
+    return (float) avgPressure.getMean();
+  }
 }
-
-////rolling average class from (http://stackoverflow.com/questions/3793400/is-there-a-function-in-java-to-get-moving-average)
-//public class Rolling {
-
-//    private int size;
-//    private float total = 0f;
-//    private int index = 0;
-//    private float samples[];
-
-//    public Rolling(int size) {
-//        this.size = size;
-//        samples = new float[size];
-//        for (int i = 0; i < size; i++) samples[i] = 0f;
-//    }
-
-//    public void add(float x) {
-//        total -= samples[index];
-//        samples[index] = x;
-//        println(samples);
-//        total += x;
-//        println(total);
-//        if (++index == size) index = 0; // cheaper than modulus
-//    }
-
-//    public float getAverage() {
-//        return (float)(total / size);
-//    }   
-//}

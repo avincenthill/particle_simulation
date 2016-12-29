@@ -17,7 +17,7 @@ void writeTextToSim(int textSize) {
   textSize(textSize);
   text("  by Alex Vincent-Hill and Roberto Nunez", textPos[0], textPos[1]-(textSize)*11, textPos[2]);
   text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", textPos[0], textPos[1]-(textSize)*9, textPos[2]);
-  text("Simulation temperature currently " + round(ps.temperature), textPos[0], textPos[1]-(textSize)*8, textPos[2]);
+  text("Simulation temperature currently " + round(ps.temperature/10000), textPos[0], textPos[1]-(textSize)*8, textPos[2]);
   text("Simulation pressure currently " + round(ps.pressure), textPos[0], textPos[1]-(textSize)*7, textPos[2]);
 
   text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
@@ -37,16 +37,19 @@ void fillColorBy(float property, float lowerLimitH, float upperLimitH, float low
 
 //strokes color by log(property) and user specified bounds of H and S
 void strokeColorBy(float property, float lowerLimitH, float upperLimitH, float lowerLimitS, float upperLimitS) {
-  float HValue = constrain(map(log(property), lowerLimitH, upperLimitH, 270, 360), 225, 360);
-  float SValue = constrain(100 - map(log(property), lowerLimitS, upperLimitS, 0, 100), 0, 100);
-  float BValue = 100;
-  stroke(HValue, SValue, BValue);
+  if (property > 0f) {
+    float HValue = constrain(map(log(property), lowerLimitH, upperLimitH, 270, 360), 225, 360);
+    float SValue = constrain(100 - map(log(property), lowerLimitS, upperLimitS, 0, 100), 0, 100);
+    float BValue = 100;
+    stroke(HValue, SValue, BValue);
+  }
 }
 
 void drawSimBox(float halfSimSize) {
   pushMatrix();
 
   //colors simulation box by temperature
+  stroke(360,0,100);
   strokeColorBy(ps.temperature,14,17,14,17);
  
   //draws simulation box
