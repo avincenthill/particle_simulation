@@ -84,7 +84,7 @@ void userIO() {
       simCam(cam);
     }
   }
-
+  
   //adds n particles with "a" keypress
   if (keyPressed) {
     if (key == 'q') {
@@ -124,6 +124,10 @@ void userIO() {
 void keyReleased(){
   if (key == 32){
     gravityToggle = !gravityToggle;
+  }
+  //adds 1 neutron on "n" keypress
+  if (key == 110){
+    ps.addNeutron();
   }
 }
 

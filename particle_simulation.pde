@@ -3,6 +3,7 @@
 
 //TBD: build a clock that uses seconds
 //TBD: put on the web with processing.js
+//TBD: make units physical
 
 //imports libraries
 import peasy.*;

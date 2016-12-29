@@ -1,7 +1,7 @@
 // Based on code by Daniel Shiffman //<>//
 // Alex Vincent-Hill and Roberto Nunez
 
-class Particle {
+public class Particle {
   int id;
 
   PVector position;
@@ -36,11 +36,11 @@ class Particle {
   DescriptiveStatistics avgKE;
 
   //Particle constructor
-  Particle(int setID) {
-    position = new PVector(random(-100, 100), random(-100, 100), random(-100, 100));
-    velocity = new PVector(random(-10, 10), random(-10, 10), random (-10, 10));
+  Particle(int setID, PVector initialPos, PVector initialVel, float initialMass) {
+    position = initialPos.copy();
+    velocity = initialVel.copy();
     acceleration = new PVector(0, 0, 0);
-    mass = random(1000, 100000);
+    mass = initialMass;
     id = setID;
     avgKE = new DescriptiveStatistics(numSmoothingFrames);
   }
@@ -119,11 +119,11 @@ class Particle {
   }
 
   //collision event specified in particle system
-  void collide(Particle otherParticle) {
+  public void collide(Particle otherParticle) {
   }
 
   //bounces particles
-  void bounce(Particle otherParticleB) {
+  public void bounce(Particle otherParticleB) {
     if (bouncesOffParticles && otherParticleB.bouncesOffParticles){
       //temp variables for collision math
       float bounceTotalMassAB = mass + otherParticleB.mass;
@@ -166,6 +166,7 @@ class Particle {
     noStroke();
     
     //constrains particles to bounds before render
+    //TBD: make this a function of PVector
     position.x = constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     position.y = constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
     position.z = constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);

@@ -26,8 +26,26 @@ class ParticleSystem {
   //adds n particles to ArrayList particleList
   void addParticles(int n) {
     for (int i = 0; i < n; i++) {
-      particleList.add(new Particle (particleList.size()));
+
+      particleList.add(new FissionableParticle (
+        particleList.size(),  //ID
+        new PVector(0,0,0), //position
+        new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
+        random(1000,10000) //mass
+        )
+        );
     }
+  }
+
+  //adds a neutron to simulation
+  void addNeutron() {
+    particleList.add(new Neutron (
+      particleList.size(), 
+      new PVector(0, -adjustedHalfSimSize, 0), 
+      new PVector(0, 10, 0), 
+      1000
+      )
+      );
   }
 
   //removes one particle (given by index) from ArrayList particleList
@@ -62,7 +80,7 @@ class ParticleSystem {
         Particle otherParticle = particleList.get(j);
 
         float distBetweenParticles = p.position.dist(otherParticle.position);
-        if (distBetweenParticles <= p.radius + otherParticle.radius &&
+        if (distBetweenParticles <= (p.radius + otherParticle.radius) &&
           p.id != otherParticle.id
           ) {
           p.collide(otherParticle);
@@ -81,7 +99,6 @@ class ParticleSystem {
       //setting running average of temperatures and pressures
       temperature = calcTemperature();
       pressure = calcPressure();
-
     }
   }
 
