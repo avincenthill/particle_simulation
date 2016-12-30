@@ -31,7 +31,7 @@ class ParticleSystem {
         particleList.size(),  //ID
         new PVector(0,0,0), //position
         new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
-        random(100,10000) //mass
+        random(1000,100000) //mass
         )
         );
     }
@@ -41,8 +41,8 @@ class ParticleSystem {
   void addNeutron() {
     particleList.add(new Neutron (
       particleList.size(), 
-      new PVector(0, -adjustedHalfSimSize, 0), 
-      new PVector(0, 10, 0), 
+      new PVector(-adjustedHalfSimSize, -adjustedHalfSimSize, -adjustedHalfSimSize), 
+      new PVector(10, 10, 10), 
       1000
       )
       );

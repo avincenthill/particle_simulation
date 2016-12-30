@@ -4,6 +4,7 @@
 //TBD: make sure fissioned mass is half fissionable - 2 neutron masses
 
 class FissionableParticle extends Particle{
+  
   //FissionableParticle constructor
   FissionableParticle(int setID, PVector initialPos, PVector initialVel, float initialMass) {
     //class variables to change from Particle
@@ -15,7 +16,7 @@ class FissionableParticle extends Particle{
     if (otherParticle instanceof Neutron){
       fission((Neutron) otherParticle);
     }
-  }
+}
   
   void fission(Neutron neutron){
     //TBD: make fission physics
@@ -35,9 +36,28 @@ class FissionableParticle extends Particle{
     this.life = 0;
     neutron.life = 0;
   }
+  
+  void display() {
+    //lowers sphere detail
+    sphereDetail(20);
+    pushMatrix();
+    //fills yellow
+    fill(135,100,100);
+    //draws particle as a sphere
+    noStroke();
+    //constrains particles to bounds before render
+    //TBD: make this a function of PVector
+    position.x = constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
+    position.y = constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
+    position.z = constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
+    translate(position.x, position.y, position.z);
+    sphere(radius);
+    popMatrix();
+  }
 }
 
 class Neutron extends Particle {
+  
   //Neutron constructor
   Neutron(int setID, PVector initialPos, PVector initialVel, float initialMass) {
     super(setID, initialPos, initialVel, initialMass);
@@ -55,27 +75,21 @@ class Neutron extends Particle {
   }
   
   void display() {
-
     //lowers sphere detail
     sphereDetail(20);
-
     pushMatrix();
-
     //fills yellow
     fill(54,100,100);
-    
     //draws particle as a sphere
     noStroke();
-
     translate(position.x, position.y, position.z);
-    
     sphere(radius);
-
     popMatrix();
   }
 }
 
 class Explosion extends Particle {
+  
   //Explosion constructor
   Explosion(int setID, PVector initialPos, PVector initialVel, float initialMass) {
     super(setID, initialPos, initialVel, initialMass);
@@ -93,22 +107,15 @@ class Explosion extends Particle {
   }
   
   void display() {
-
     //lowers sphere detail
     sphereDetail(20);
-
     pushMatrix();
-
     //fills yellow
     fill(360,100,100);
-    
     //draws particle as a sphere
     noStroke();
-
     translate(position.x, position.y, position.z);
-    
     sphere(radius);
-
     popMatrix();
   }
 }

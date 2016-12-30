@@ -18,7 +18,6 @@ public class Particle {
   float charge = 1;
   float bindingEnergy;
 
-  //friction losses
   float elasticity = 0.95;
   float coefficientSlidingFriction = 0.999;
   float drag = 1;
@@ -31,7 +30,6 @@ public class Particle {
   boolean deletesOnWalls = false;
   boolean fissionable = false;
   
-  //data smoothing
   int numSmoothingFrames = 25;
   DescriptiveStatistics avgKE;
 
