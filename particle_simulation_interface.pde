@@ -8,23 +8,12 @@ void writeTitle() {
   surface.setTitle("Particle simulation running at " + int(frameRate) + " FPS.");
 }
 
-void writeTextToSim(int textSize) {
-  float[] textPos = {-500, -500, -500};
-  fill(0, 0, 100);
-  textSize(textSize*2);
-  text("particle_simulation of", textPos[0], textPos[1]-(textSize)*14, textPos[2]);
-  text(ps.particleList.size() + " particles.", textPos[0], textPos[1]-(textSize)*12, textPos[2]);
-  textSize(textSize);
-  text("  by Alex Vincent-Hill and Roberto Nunez", textPos[0], textPos[1]-(textSize)*11, textPos[2]);
-  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", textPos[0], textPos[1]-(textSize)*9, textPos[2]);
-  text("Simulation temperature currently " + round(ps.temperature/10000), textPos[0], textPos[1]-(textSize)*8, textPos[2]);
-  text("Simulation pressure currently " + round(ps.pressure), textPos[0], textPos[1]-(textSize)*7, textPos[2]);
-
-  text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
-  text("Press \"r\" to restart with " + numberStartingParticles + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
-  text("Press \"n\" to inject a neutron.", textPos[0], textPos[1]-(textSize)*3, textPos[2]);
-  text("Hold \"SPACE\" to toggle gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
-  text("Hold \"w,a,s,d\" to add wind forces.", textPos[0], textPos[1]-(textSize)*1, textPos[2]);
+//initializes cam and orients view
+void simCam(PeasyCam cam) {
+  cam = new PeasyCam(this, 2500);
+  cam.rotateX(PI/6);
+  cam.rotateY(-PI/6);
+  cam.rotateZ(PI/12);
 }
 
 //fills color by log(property) and user specified bounds of H and S
@@ -43,6 +32,25 @@ void strokeColorBy(float property, float lowerLimitH, float upperLimitH, float l
     float BValue = 100;
     stroke(HValue, SValue, BValue);
   }
+}
+
+void writeTextToSim(int textSize) {
+  float[] textPos = {-500, -500, -500};
+  fill(0, 0, 100);
+  textSize(textSize*2);
+  text("particle_simulation of", textPos[0], textPos[1]-(textSize)*14, textPos[2]);
+  text(ps.particleList.size() + " particles.", textPos[0], textPos[1]-(textSize)*12, textPos[2]);
+  textSize(textSize);
+  text("  by Alex Vincent-Hill and Roberto Nunez", textPos[0], textPos[1]-(textSize)*11, textPos[2]);
+  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", textPos[0], textPos[1]-(textSize)*9, textPos[2]);
+  text("Simulation temperature currently " + round(ps.temperature/10000), textPos[0], textPos[1]-(textSize)*8, textPos[2]);
+  text("Simulation pressure currently " + round(ps.pressure), textPos[0], textPos[1]-(textSize)*7, textPos[2]);
+
+  text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
+  text("Press \"r\" to restart with " + numberStartingParticles + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
+  text("Press \"n\" to inject a neutron.", textPos[0], textPos[1]-(textSize)*3, textPos[2]);
+  text("Hold \"SPACE\" to toggle gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
+  text("Hold \"w,a,s,d\" to add wind forces.", textPos[0], textPos[1]-(textSize)*1, textPos[2]);
 }
 
 void drawSimBox(float halfSimSize) {
@@ -131,10 +139,18 @@ void keyReleased() {
   }
 }
 
-//initializes cam and orients view
-void simCam(PeasyCam cam) {
-  cam = new PeasyCam(this, 2500);
-  cam.rotateX(PI/6);
-  cam.rotateY(-PI/6);
-  cam.rotateZ(PI/12);
-}
+//force vectors
+//TBD: interparticle charge
+//TBD: electric fields/charged particles attracting and repelling each other
+//TBD: 3D gravitational fields
+
+//gravity
+float gravityMag = 1;
+PVector gravity = new PVector (0, gravityMag, 0);
+PVector antigravity = new PVector (0, -gravityMag, 0);
+
+//wind
+PVector wwind = new PVector (0, -1, 0);
+PVector awind = new PVector (-1, -1, -1);
+PVector swind = new PVector (0, 1, 0);
+PVector dwind = new PVector (1, 1, 1);

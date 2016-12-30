@@ -35,17 +35,13 @@ ParticleSystem ps;
 
 void setup() {
   //sets window size and rendering mode
-  size(1500, 1500, P3D);
-
+  size(1000, 1000, P3D);
   //sets color mode
   colorMode(HSB, 360, 100, 100);
-
   //initializes cam and orients view
   simCam(cam);
-
   //starts background black
   background(0);
-
   //initializes particle system
   ps = new ParticleSystem();
 }
@@ -53,19 +49,14 @@ void setup() {
 void draw() {
   //writes title
   writeTitle();
-
   //wipes background black
   background(0);
-
   //displays text in simulation area
   writeTextToSim(textSize);
-  
   //draws box
   drawSimBox(halfSimSize);
-
   //runs particle system
   ps.psrun();
-
   //user I/O
   userIO();
 }
