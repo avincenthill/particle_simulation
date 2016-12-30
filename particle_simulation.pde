@@ -4,6 +4,10 @@
 //TBD: build a clock that uses seconds
 //TBD: put on the web with processing.js
 //TBD: make units physical
+//TBD: make chemical reactions
+//TBD: make transmorph a function
+//TBD: make bouncing on walls create a temperary sprite particle
+//TBD: graph pressure and temperature
 
 //imports libraries
 import peasy.*;
@@ -12,10 +16,10 @@ import peasy.org.apache.commons.math.geometry.*;
 
 //n is the number of particles in the simulation
 int numberStartingParticles = 100;
-int addingParticleRate = numberStartingParticles/10;
+int addingParticleRate = numberStartingParticles/100;
 
 //simulation variables
-float simSize = 1000;
+float simSize = 500;
 float halfSimSize = simSize/2;
 float volumeFudgeFactor = 0.95;
 float volume = pow(simSize*volumeFudgeFactor, 3);
