@@ -1,7 +1,8 @@
 // Based on code by Daniel Shiffman
 // Alex Vincent-Hill and Roberto Nunez
 
-//TBD: make sure fissioned mass is half fissionable - 2 neutron masses
+//TBD: make chemical reactions
+//TBD: make transmorph a function
 
 class FissionableParticle extends Particle{
   
@@ -16,8 +17,42 @@ class FissionableParticle extends Particle{
     if (otherParticle instanceof Neutron){
       fission((Neutron) otherParticle);
     }
-}
+  }
   
+  //updates fissionable particles properties, zeroes acceleration, adds drag to velocity
+  void update() {
+    velocity.add(acceleration);
+    velocity.mult(drag);
+    position.add(velocity);
+
+    //clears acceleration for next loop
+    acceleration.mult(0);
+
+    //updates momentum
+    momentum = velocity.copy().mult(mass);
+
+    //updates velocity?
+    velocity = momentum.copy().mult(1/mass);
+
+    //updates KE (1/2mv^2)
+    avgKE.addValue(abs(0.5*mass*velocity.magSq()));
+    kineticEnergy = (float) avgKE.getMean();
+
+    //updates GPE (mgh)
+    gravitationalPotentialEnergy = mass * gravitationalConstant * ((halfSimSize)-position.y);
+
+    //updates density and radius
+    radius = (float)Math.cbrt((double)((3*mass*density)/(4*PI)));
+    
+    //adds random decay
+    //TBD: make decay a function
+    if (Math.random() < 0.00001){
+      Neutron neutron1 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)),1000);
+      ps.particleList.add(neutron1);
+    }
+  }
+  
+
   void fission(Neutron neutron){
     //TBD: make fission physics
     this.fissionable = false;

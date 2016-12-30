@@ -18,7 +18,7 @@ int n = 100;
 //simulation variables
 float simSize = 1000;
 float halfSimSize = simSize/2;
-float volumeFudgeFactor = 0.9;
+float volumeFudgeFactor = 0.95;
 float volume = pow(simSize*volumeFudgeFactor, 3);
 float adjustedHalfSimSize = volumeFudgeFactor*halfSimSize;
 boolean gravityToggle = false;
