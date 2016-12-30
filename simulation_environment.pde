@@ -21,7 +21,7 @@ void writeTextToSim(int textSize) {
   text("Simulation pressure currently " + round(ps.pressure), textPos[0], textPos[1]-(textSize)*7, textPos[2]);
 
   text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
-  text("Press \"r\" to restart with " + n + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
+  text("Press \"r\" to restart with " + numberStartingParticles + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
   text("Press \"n\" to inject a neutron.", textPos[0], textPos[1]-(textSize)*3, textPos[2]);
   text("Hold \"SPACE\" to toggle gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
   text("Hold \"w,a,s,d\" to add wind forces.", textPos[0], textPos[1]-(textSize)*1, textPos[2]);
@@ -49,9 +49,9 @@ void drawSimBox(float halfSimSize) {
   pushMatrix();
 
   //colors simulation box by temperature
-  stroke(360,0,100);
-  strokeColorBy(ps.temperature,14,17,14,17);
- 
+  stroke(360, 0, 100);
+  strokeColorBy(ps.temperature, 14, 17, 14, 17);
+
   //draws simulation box
   strokeWeight(5);
   line(halfSimSize, halfSimSize, halfSimSize, -halfSimSize, halfSimSize, halfSimSize);
@@ -78,18 +78,18 @@ void userIO() {
       ps.removeAllParticles();
 
       //adds n particles to particle system
-      ps.addParticles(n);
+      ps.addParticles(numberStartingParticles);
 
       //resets camera view
-      simCam(cam);
+      //simCam(cam);
     }
   }
-  
+
   //adds n particles with "a" keypress
   if (keyPressed) {
     if (key == 'q') {
       //adds n particles to particle system
-      ps.addParticles(n/10);
+      ps.addParticles(addingParticleRate);
     }
   }
 
@@ -116,17 +116,17 @@ void userIO() {
   }
 
   //removes gravity force with "SPACE" hold
-  if (gravityToggle){
-      ps.applyForce(gravity);
+  if (gravityToggle) {
+    ps.applyForce(gravity);
   }
 }
 
-void keyReleased(){
-  if (key == 32){
+void keyReleased() {
+  if (key == 32) {
     gravityToggle = !gravityToggle;
   }
   //adds 1 neutron on "n" keypress
-  if (key == 110){
+  if (key == 110) {
     ps.addNeutron();
   }
 }

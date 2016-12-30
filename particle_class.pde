@@ -3,25 +3,24 @@
 
 public class Particle {
   int id;
+  int numSmoothingFrames = 5;
+  DescriptiveStatistics avgKE;
 
   PVector position;
   PVector velocity;
   PVector acceleration;
+  PVector momentum;
 
   float mass;
   float radius;
   float density = 1;
-  PVector momentum;
   float kineticEnergy;
   float gravitationalPotentialEnergy;
-
   float charge = 1;
   float bindingEnergy;
-
   float elasticity = 0.95;
   float coefficientSlidingFriction = 0.999;
   float drag = 1;
-
   float agingRate = 0;
   float life = 100;
   
@@ -29,9 +28,6 @@ public class Particle {
   boolean bouncesOffWalls = true;
   boolean deletesOnWalls = false;
   boolean fissionable = false;
-  
-  int numSmoothingFrames = 25;
-  DescriptiveStatistics avgKE;
 
   //Particle constructor
   Particle(int setID, PVector initialPos, PVector initialVel, float initialMass) {
@@ -164,10 +160,7 @@ public class Particle {
     noStroke();
     
     //constrains particles to bounds before render
-    //TBD: make this a function of PVector
-    position.x = constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
-    position.y = constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
-    position.z = constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius);
+    position = new PVector (constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius),constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius),constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius));
     translate(position.x, position.y, position.z);
     
     sphere(radius);

@@ -28,10 +28,10 @@ class ParticleSystem {
     for (int i = 0; i < n; i++) {
 
       particleList.add(new FissionableParticle (
-        particleList.size(),  //ID
-        new PVector(0,0,0), //position
+        particleList.size(), //ID
+        new PVector(0, 0, 0), //position
         new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
-        random(1000,100000) //mass
+        random(10000, 1000000) //mass
         )
         );
     }
@@ -42,7 +42,7 @@ class ParticleSystem {
     particleList.add(new Neutron (
       particleList.size(), 
       new PVector(-adjustedHalfSimSize, -adjustedHalfSimSize, -adjustedHalfSimSize), 
-      new PVector(10, 10, 10), 
+      new PVector(random(8, 12), random(8, 12), random(8, 12)), 
       1000
       )
       );

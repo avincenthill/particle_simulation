@@ -10,10 +10,9 @@ import peasy.*;
 import peasy.org.apache.commons.math.*;
 import peasy.org.apache.commons.math.geometry.*;
 
-//TBD: import apache math
-
 //n is the number of particles in the simulation
-int n = 100;
+int numberStartingParticles = 100;
+int addingParticleRate = numberStartingParticles/10;
 
 //simulation variables
 float simSize = 1000;
