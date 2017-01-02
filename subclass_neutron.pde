@@ -9,6 +9,7 @@ class Neutron extends Particle {
     this.deletesOnWalls = false;
     this.bouncesOffParticles = false;
     this.bouncesOffWalls = false;
+    this.subjectToForces = false;
     this.agingRate = 1;
     this.life = 100;
     this.mass = 10000;

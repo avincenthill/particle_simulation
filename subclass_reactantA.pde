@@ -6,14 +6,14 @@ class ReactantA extends Particle {
   ReactantA(int setID, PVector initialPos, PVector initialVel, float initialMass) {
     super(setID, initialPos, initialVel, initialMass);
   }
-  
+
   public void collide(Particle otherParticle) {
     //chance of fission
     if (otherParticle instanceof ReactantB) {
       react((ReactantB) otherParticle, .5);
     }
   }
-  
+
   //updates reactantA particles properties, zeroes acceleration, adds drag to velocity
   void update() {
     velocity.add(acceleration);
@@ -35,13 +35,13 @@ class ReactantA extends Particle {
   }
 
   void react(ReactantB reactantB, float chance) {
-    if (Math.random() < chance){
-      
+    if (Math.random() < chance) {
+
       Particle productC = new ProductC(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass + reactantB.mass);
       ps.particleList.add(productC);
       Explosion explosion = new Explosion(ps.particleList.size(), this.position.add(0, 0, 0), new PVector(0, 0, 0), 10000);
       ps.particleList.add(explosion);
-      
+
       //deletes both particles
       this.life = 0;
       reactantB.life = 0;

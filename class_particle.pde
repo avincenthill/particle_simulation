@@ -16,14 +16,16 @@ public class Particle {
   float gravitationalPotentialEnergy;
   float charge = 0;
   float bindingEnergy;
-  float elasticity = 1;
+  float elasticity = 0.99;
   float coefficientSlidingFriction = 1;
   float drag = 1;
   float agingRate = 0;
   float life = 100;
+  float hue;
   boolean bouncesOffParticles = true;
   boolean bouncesOffWalls = true;
   boolean deletesOnWalls = false;
+  boolean subjectToForces = true;
   boolean fissionable = false;
 
   //Particle constructor
@@ -37,7 +39,9 @@ public class Particle {
   }
 
   void applyForceToParticle(PVector force) {
-    acceleration.add(force);
+    if (this.subjectToForces) {
+      acceleration.add(force);
+    }
   }
 
   //executes methods on particles

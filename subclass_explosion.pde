@@ -2,7 +2,6 @@
 // Alex Vincent-Hill and Roberto Nunez
 
 class Explosion extends Particle {
-  float hue;
   //Explosion constructor
   Explosion(int setID, PVector initialPos, PVector initialVel, float initialMass) {
     super(setID, initialPos, initialVel, initialMass);

@@ -19,7 +19,7 @@ int numberStartingParticles = 100;
 int addingParticleRate = numberStartingParticles/100;
 
 //simulation variables
-float simSize = 500;
+float simSize = 1000;
 float halfSimSize = simSize/2;
 float volumeFudgeFactor = 0.95;
 float volume = pow(simSize*volumeFudgeFactor, 3);

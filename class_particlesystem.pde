@@ -23,11 +23,35 @@ class ParticleSystem {
   //adds n particles to ArrayList particleList
   void addParticles(int n) {
     for (int i = 0; i < n; i++) {
+      particleList.add(new Particle (
+        particleList.size(), //ID
+        new PVector(0, 0, 0), //position
+        new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
+        100000
+        )
+        );
+    }
+  }
+
+  void addFissionableParticles(int n) {
+    for (int i = 0; i < n; i++) {
+      particleList.add(new FissionableParticle (
+        particleList.size(), //ID
+        new PVector(0, 0, 0), //position
+        new PVector(random(-1, 1), random(-1, 1), random (-1, 1)), //velocity
+        100000
+        )
+        );
+    }
+  }
+
+  void addReactants(int n) {
+    for (int i = 0; i < n; i++) {
       particleList.add(new ReactantA (
         particleList.size(), //ID
         new PVector(-adjustedHalfSimSize, -adjustedHalfSimSize, -adjustedHalfSimSize), //position
         new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
-        10000
+        100000
         )
         );
     }
@@ -36,7 +60,7 @@ class ParticleSystem {
         particleList.size(), //ID
         new PVector(adjustedHalfSimSize, adjustedHalfSimSize, adjustedHalfSimSize), //position
         new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
-        10000
+        100000
         )
         );
     }
@@ -49,6 +73,17 @@ class ParticleSystem {
       new PVector(-adjustedHalfSimSize, -adjustedHalfSimSize, -adjustedHalfSimSize), 
       new PVector(random(8, 12), random(8, 12), random(8, 12)), 
       1000
+      )
+      );
+  }
+
+  //adds a DrDevice particle to simulation
+  void addDrDevice() {
+    particleList.add(new DrDevice (
+      particleList.size(), 
+      new PVector(-adjustedHalfSimSize, -adjustedHalfSimSize, -adjustedHalfSimSize), 
+      new PVector(random(8, 12), random(8, 12), random(8, 12)), 
+      10000
       )
       );
   }

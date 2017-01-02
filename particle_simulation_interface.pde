@@ -36,18 +36,20 @@ void writeTextToSim(int textSize) {
   float[] textPos = {-500, -500, -500};
   fill(0, 0, 100);
   textSize(textSize*2);
-  text("particle_simulation of", textPos[0], textPos[1]-(textSize)*14, textPos[2]);
-  text(ps.particleList.size() + " particles.", textPos[0], textPos[1]-(textSize)*12, textPos[2]);
+  text("particle_simulation of", textPos[0], textPos[1]-(textSize)*15, textPos[2]);
+  text(ps.particleList.size() + " particles.", textPos[0], textPos[1]-(textSize)*13, textPos[2]);
   textSize(textSize);
-  text("  by Alex Vincent-Hill and Roberto Nunez", textPos[0], textPos[1]-(textSize)*11, textPos[2]);
-  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", textPos[0], textPos[1]-(textSize)*9, textPos[2]);
-  text("Simulation temperature currently " + round(ps.temperature/10000), textPos[0], textPos[1]-(textSize)*8, textPos[2]);
-  text("Simulation pressure currently " + round(ps.pressure), textPos[0], textPos[1]-(textSize)*7, textPos[2]);
+  text("  by Alex Vincent-Hill and Roberto Nunez", textPos[0], textPos[1]-(textSize)*12, textPos[2]);
 
-  text("Hold \"q\" to add particles.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
-  text("Press \"r\" to restart with " + numberStartingParticles + " particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
-  text("Press \"n\" to inject a neutron.", textPos[0], textPos[1]-(textSize)*3, textPos[2]);
-  text("Hold \"SPACE\" to toggle gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
+  text("Frame " + frameCount + " of simulation running at " + round(frameRate) + " FPS.", textPos[0], textPos[1]-(textSize)*10, textPos[2]);
+  text("Simulation temperature currently " + round(ps.temperature/10000), textPos[0], textPos[1]-(textSize)*9, textPos[2]);
+  text("Simulation pressure currently " + round(ps.pressure), textPos[0], textPos[1]-(textSize)*8, textPos[2]);
+
+  text("Press \"r\" to restart with " + numberStartingParticles + " particles.", textPos[0], textPos[1]-(textSize)*6, textPos[2]);
+  text("Hold \"c\" to add chemical reactants.", textPos[0], textPos[1]-(textSize)*5, textPos[2]);
+  text("Hold \"q\" to add particles, and \"f\" to add fissionable particles.", textPos[0], textPos[1]-(textSize)*4, textPos[2]);
+  text("Press \"n\" to inject a neutron and \"m\" to inject a MDD.", textPos[0], textPos[1]-(textSize)*3, textPos[2]);
+  text("Press \"SPACE\" to toggle gravity.", textPos[0], textPos[1]-(textSize)*2, textPos[2]);
   text("Hold \"w,a,s,d\" to add wind forces.", textPos[0], textPos[1]-(textSize)*1, textPos[2]);
 }
 
@@ -91,11 +93,19 @@ void userIO() {
     }
   }
 
-  //adds n particles with "a" keypress
+  //adds n particles with "q" keypress
   if (keyPressed) {
     if (key == 'q') {
       //adds n particles to particle system
       ps.addParticles(addingParticleRate);
+    }
+  }
+
+  //adds n fissionable particles with "f" keypress
+  if (keyPressed) {
+    if (key == 'f') {
+      //adds n particles to particle system
+      ps.addFissionableParticles(addingParticleRate);
     }
   }
 
@@ -120,6 +130,11 @@ void userIO() {
       ps.applyForce(dwind);
     }
   }
+  if (keyPressed) {
+    if (key == 'c') {
+      ps.addReactants(addingParticleRate);
+    }
+  }
 
   //removes gravity force with "SPACE" hold
   if (gravityToggle) {
@@ -134,6 +149,10 @@ void keyReleased() {
   //adds 1 neutron on "n" keypress
   if (key == 110) {
     ps.addNeutron();
+  }
+  //adds 1 DrDevice particle on "m" keypress
+  if (key == 109) {
+    ps.addDrDevice();
   }
 }
 

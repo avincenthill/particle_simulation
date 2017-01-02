@@ -37,18 +37,18 @@ class FissionableParticle extends Particle {
     //fissile material decays with a small chance every run cycle
     fissionDecay(0.00001);
   }
-  
+
   //adds random decay (creating a neutron at current position, creating fission collision reaction)
-  void fissionDecay(float chance){
-      if (Math.random() < chance) {
-        Neutron neutron1 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
-        ps.particleList.add(neutron1);
+  void fissionDecay(float chance) {
+    if (Math.random() < chance) {
+      Neutron neutron1 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
+      ps.particleList.add(neutron1);
     }
   }
 
   void fission(Neutron neutron, float chance) {
     //TBD: make fission physical
-    if (Math.random() < chance){
+    if (Math.random() < chance) {
       this.fissionable = false;
       Particle fissionProduct1 = new Particle(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass/2);
       ps.particleList.add(fissionProduct1);

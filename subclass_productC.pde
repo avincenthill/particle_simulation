@@ -6,7 +6,7 @@ class ProductC extends Particle {
   ProductC(int setID, PVector initialPos, PVector initialVel, float initialMass) {
     super(setID, initialPos, initialVel, initialMass);
   }
-  
+
   void update() {
     velocity.add(acceleration);
     velocity.mult(drag);
@@ -28,15 +28,15 @@ class ProductC extends Particle {
   }
 
   void decompose(float chance) {
-    if (Math.random() < chance){
-      
+    if (Math.random() < chance) {
+
       Particle reactantA = new ReactantA(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass/2);
       ps.particleList.add(reactantA);
       Particle reactantB = new ReactantB(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass/2);
       ps.particleList.add(reactantB);
       Explosion explosion = new Explosion(ps.particleList.size(), this.position.add(0, 0, 0), new PVector(0, 0, 0), 10000);
       ps.particleList.add(explosion);
-      
+
       //deletes both particles
       this.life = 0;
     }
