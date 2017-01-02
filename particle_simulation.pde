@@ -4,7 +4,6 @@
 //TBD: build a clock that uses seconds
 //TBD: put on the web with processing.js
 //TBD: make units physical
-//TBD: make chemical reactions
 //TBD: make transmorph a function
 //TBD: make bouncing on walls create a temperary sprite particle
 //TBD: graph pressure and temperature
