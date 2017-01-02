@@ -23,11 +23,20 @@ class ParticleSystem {
   //adds n particles to ArrayList particleList
   void addParticles(int n) {
     for (int i = 0; i < n; i++) {
-      particleList.add(new FissionableParticle (
+      particleList.add(new ReactantA (
         particleList.size(), //ID
-        new PVector(0, 0, 0), //position
+        new PVector(-adjustedHalfSimSize, -adjustedHalfSimSize, -adjustedHalfSimSize), //position
         new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
-        random(10000, 1000000) //mass
+        10000
+        )
+        );
+    }
+    for (int j = 0; j < n; j++) {
+      particleList.add(new ReactantB (
+        particleList.size(), //ID
+        new PVector(adjustedHalfSimSize, adjustedHalfSimSize, adjustedHalfSimSize), //position
+        new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), //velocity
+        10000
         )
         );
     }
