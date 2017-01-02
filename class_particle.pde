@@ -16,8 +16,8 @@ public class Particle {
   float gravitationalPotentialEnergy;
   float charge = 0;
   float bindingEnergy;
-  float elasticity = 1;
-  float coefficientSlidingFriction = 1;
+  float elasticity = 0.95;
+  float coefficientSlidingFriction = 0.999;
   float drag = 1;
   float agingRate = 0;
   float life = 100;

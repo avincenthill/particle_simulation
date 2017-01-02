@@ -1,6 +1,8 @@
 // Based on code by Daniel Shiffman
 // Alex Vincent-Hill and Roberto Nunez
 
+//TBD: graph pressure and temperature
+
 //writes title with fps count and restart instructions
 void writeTitle() {
   surface.setTitle("Particle simulation running at " + int(frameRate) + " FPS.");

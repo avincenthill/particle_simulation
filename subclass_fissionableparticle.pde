@@ -1,6 +1,10 @@
 // Based on code by Daniel Shiffman
 // Alex Vincent-Hill and Roberto Nunez
 
+//TBD: make chemical reactions
+//TBD: make transmorph a function
+//TBD: make bouncing on walls create a temperary sprite particle
+
 class FissionableParticle extends Particle {
   //FissionableParticle constructor
   FissionableParticle(int setID, PVector initialPos, PVector initialVel, float initialMass) {
@@ -11,8 +15,8 @@ class FissionableParticle extends Particle {
 
   public void collide(Particle otherParticle) {
     //chance of fission
-    if (otherParticle instanceof Neutron) {
-      fission((Neutron) otherParticle, 1);
+    if (otherParticle instanceof Neutron && (Math.random() < 0.5)) {
+      fission((Neutron) otherParticle);
     }
   }
 
@@ -34,36 +38,31 @@ class FissionableParticle extends Particle {
     gravitationalPotentialEnergy = mass * gravitationalConstant * ((halfSimSize)-position.y);
     //updates density and radius
     radius = (float)Math.cbrt((double)((3*mass*density)/(4*PI)));
-    //fissile material decays with a small chance every run cycle
-    fissionDecay(0.00001);
-  }
-  
-  //adds random decay (creating a neutron at current position, creating fission collision reaction)
-  void fissionDecay(float chance){
-      if (Math.random() < chance) {
-        Neutron neutron1 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
-        ps.particleList.add(neutron1);
+    //adds random decay
+    //TBD: make decay a function
+    if (Math.random() < 0.00001) {
+      Neutron neutron1 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
+      ps.particleList.add(neutron1);
     }
   }
 
-  void fission(Neutron neutron, float chance) {
-    //TBD: make fission physical
-    if (Math.random() < chance){
-      this.fissionable = false;
-      Particle fissionProduct1 = new Particle(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass/2);
-      ps.particleList.add(fissionProduct1);
-      Particle fissionProduct2 = new Particle(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass/2);
-      ps.particleList.add(fissionProduct2);
-      Neutron neutron1 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
-      ps.particleList.add(neutron1);
-      Neutron neutron2 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
-      ps.particleList.add(neutron2);
-      Explosion explosion = new Explosion(ps.particleList.size(), this.position.add(0, 0, 0), new PVector(0, 0, 0), 10000);
-      ps.particleList.add(explosion);
-      //deletes both neutron and fissionable particle
-      this.life = 0;
-      neutron.life = 0;
-    }
+  void fission(Neutron neutron) {
+    //TBD: make fission physics
+    this.fissionable = false;
+    Particle fissionProduct1 = new Particle(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass/2);
+    ps.particleList.add(fissionProduct1);
+    Particle fissionProduct2 = new Particle(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), this.mass/2);
+    ps.particleList.add(fissionProduct2);
+    Neutron neutron1 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
+    ps.particleList.add(neutron1);
+    Neutron neutron2 = new Neutron(ps.particleList.size(), this.position.add(new PVector(random(-1, 1), random(-1, 1), random (-1, 1))), new PVector(random(-10, 10), random(-10, 10), random (-10, 10)), 1000);
+    ps.particleList.add(neutron2);
+    Explosion explosion = new Explosion(ps.particleList.size(), this.position.add(0, 0, 0), new PVector(0, 0, 0), 10000);
+    ps.particleList.add(explosion);
+
+    //deletes both neutron and fissionable particle
+    this.life = 0;
+    neutron.life = 0;
   }
 
   void display() {
