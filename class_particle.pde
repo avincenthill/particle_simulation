@@ -147,6 +147,7 @@ public class Particle {
     //constrains particles to bounds before render
     position = new PVector (constrain(position.x, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius), constrain(position.y, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius), constrain(position.z, -adjustedHalfSimSize + radius, adjustedHalfSimSize - radius));
     translate(position.x, position.y, position.z);
+    drawViewFrustrum(velocity.copy());
     sphere(radius);
     popMatrix();
   }
@@ -158,5 +159,48 @@ public class Particle {
     } else {
       return false;
     }
+  }
+  
+  //TBD: mathmatical description of vison and pointing for particles
+  public void drawViewFrustrum(PVector p1) {
+    pushMatrix();
+    
+    stroke(255);
+    
+    /*
+    beginShape();
+    PVector d = p1.mult(20);
+    vertex(0, 0, 0);
+    vertex(0, -100, -100);
+    vertex(0, 0, 100);
+
+    vertex(0, 0, 0);
+    vertex(100, 100, -100);
+    vertex(0, 0, 100);
+
+    vertex(0, 0, 0);
+    vertex(-100, 100, -100);
+    vertex(0, 0, 100);
+
+    vertex(0, 0, 0);
+    vertex(-100, -100, -100);
+    vertex(0, 0, 100);
+    endShape();
+    */
+    
+    line(0, 0, 0, p1.x*10, p1.y*10, p1.z*10);
+    
+    noStroke();
+    
+    popMatrix();
+  }
+
+  //draws pointing vector line
+  public void vectorLineTranslated(PVector p1) {
+    pushMatrix();
+    stroke(255);
+    line(0, 0, 0, p1.x, p1.y, p1.z);
+    noStroke();
+    popMatrix();
   }
 }

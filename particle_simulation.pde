@@ -41,6 +41,9 @@ void setup() {
   size(1000, 1000, P3D);
   //sets color mode
   colorMode(HSB, 360, 100, 100);
+  
+  //smooth(3);
+  
   //initializes cam and orients view
   simCam(cam);
   //starts background black
